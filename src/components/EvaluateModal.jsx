@@ -25,6 +25,7 @@ import {
 } from 'lucide-react';
 import Modal from './Modal';
 import { useTheme } from '../context/ThemeContext';
+import { useNavigate } from 'react-router-dom';
 
 // Define evaluation steps with user-provided metrics
 const evaluationSteps = [
@@ -249,6 +250,8 @@ const ProcessStep = ({ step, status, index, activeStep }) => {
 
 const EvaluateModal = ({ isOpen, onClose, onComplete }) => {
   const { theme } = useTheme();
+  const isDark = theme === 'dark';
+  const navigate = useNavigate();
   const [currentStep, setCurrentStep] = useState(0);
   const [isProcessing, setIsProcessing] = useState(true);
   const [isComplete, setIsComplete] = useState(false);
@@ -323,6 +326,12 @@ const EvaluateModal = ({ isOpen, onClose, onComplete }) => {
     onClose();
   };
   
+  // Handle view results
+  const handleViewResults = () => {
+    onClose(); // Close the modal
+    navigate('/evaluation-results'); // Navigate to the results page
+  };
+  
   return (
     <Modal 
       isOpen={isOpen} 
@@ -387,16 +396,17 @@ const EvaluateModal = ({ isOpen, onClose, onComplete }) => {
         </AnimatePresence>
         
         {/* Button area */}
-        <div className="mt-6 flex justify-end">
+        <div className="mt-6 flex justify-center">
           <button
-            onClick={handleClose}
-            className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+            onClick={handleViewResults}
+            className={`px-6 py-2.5 rounded-lg font-medium transition-colors ${
               isProcessing
-                ? 'bg-gray-300 text-gray-700 hover:bg-gray-400 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600'
+                ? 'bg-gray-300 text-gray-700 hover:bg-gray-400 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600 cursor-not-allowed opacity-70'
                 : 'bg-purple-500 text-white hover:bg-purple-600 dark:bg-purple-600 dark:hover:bg-purple-700'
             }`}
+            disabled={isProcessing}
           >
-            {isComplete ? 'Close' : 'Cancel'}
+            View Evaluation Result
           </button>
         </div>
       </div>

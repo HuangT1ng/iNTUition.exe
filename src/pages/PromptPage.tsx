@@ -4,6 +4,7 @@ import { Button } from '../components/Button';
 import { ThemeToggle } from '../components/ThemeToggle';
 import { Footer } from '../components/Footer';
 import { useTheme } from '../context/ThemeContext';
+import { useNavigate } from 'react-router-dom';
 // @ts-ignore
 import BackendFrontendOverview from './BackendFrontendOverview';
 
@@ -19,12 +20,14 @@ export function PromptPage({ onNext }: PromptPageProps) {
   const [showDesign, setShowDesign] = React.useState(false);
   const typingTimeoutRef = React.useRef<ReturnType<typeof setTimeout>>();
   const { theme } = useTheme();
+  const navigate = useNavigate();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (idea.trim()) {
       onNext(idea);
-      setShowDesign(true); // Show the design component when the button is clicked
+      // Navigate to the backend-frontend-overview page
+      navigate('/backend-frontend-overview');
     }
   };
 
