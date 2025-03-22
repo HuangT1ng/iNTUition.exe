@@ -1,65 +1,34 @@
 import React from 'react';
-import { Card } from '../components/Card';
-import { Button } from '../components/Button';
-import { Download } from 'lucide-react';
 
 interface Step3DesignProps {
   onBack: () => void;
 }
 
 export function Step3Design({ onBack }: Step3DesignProps) {
+  // Empty handler - does nothing when the button is clicked
+  const handleGenerateDesign = () => {
+    // Intentionally empty - button does nothing
+  };
+
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="max-w-4xl mx-auto space-y-8">
-        <h2 className="text-3xl font-bold text-gray-900 mb-8">System Design</h2>
+    <div className="container mx-auto px-4 py-8 bg-gradient-to-br from-violet-50 via-purple-50 to-indigo-50 min-h-screen">
+      <div className="max-w-4xl mx-auto flex flex-col items-center">
+        <h2 className="text-3xl font-bold mb-8 bg-gradient-to-r from-violet-700 to-purple-700 bg-clip-text text-transparent">Design Generator</h2>
+        
+        <button 
+          className="px-6 py-3 bg-gradient-to-r from-violet-600 to-purple-600 text-white font-medium rounded-lg hover:from-violet-700 hover:to-purple-700 transition-colors"
+          onClick={handleGenerateDesign}
+        >
+          Generate Design
+        </button>
 
-        <Card title="High-Level Design (HLD)" className="mb-6">
-          <div className="prose max-w-none">
-            <h4 className="text-lg font-medium mb-4">System Architecture</h4>
-            <div className="bg-gray-50 p-4 rounded-lg">
-              {/* Mermaid diagram would go here */}
-              <p className="text-gray-600">System architecture diagram...</p>
-            </div>
-          </div>
-        </Card>
-
-        <Card title="Low-Level Design (LLD)" className="mb-6">
-          <div className="space-y-4">
-            <div>
-              <h4 className="text-lg font-medium mb-2">API Endpoints</h4>
-              <pre className="bg-gray-50 p-4 rounded-lg overflow-x-auto">
-                <code className="text-sm">
-                  GET /api/v1/resources{'\n'}
-                  POST /api/v1/resources{'\n'}
-                  PUT /api/v1/resources/:id{'\n'}
-                  DELETE /api/v1/resources/:id
-                </code>
-              </pre>
-            </div>
-
-            <div>
-              <h4 className="text-lg font-medium mb-2">Database Schema</h4>
-              <pre className="bg-gray-50 p-4 rounded-lg overflow-x-auto">
-                <code className="text-sm">
-                  Table: resources{'\n'}
-                  - id: uuid PRIMARY KEY{'\n'}
-                  - name: varchar(255){'\n'}
-                  - description: text{'\n'}
-                  - created_at: timestamp
-                </code>
-              </pre>
-            </div>
-          </div>
-        </Card>
-
-        <div className="flex justify-between">
-          <Button variant="secondary" onClick={onBack}>
+        <div className="mt-8">
+          <button 
+            className="px-4 py-2 bg-white border border-gray-300 text-gray-700 font-medium rounded-lg hover:bg-gray-50 transition-colors"
+            onClick={onBack}
+          >
             Back
-          </Button>
-          <Button>
-            <Download className="w-5 h-5 mr-2" />
-            Export as PDF
-          </Button>
+          </button>
         </div>
       </div>
     </div>

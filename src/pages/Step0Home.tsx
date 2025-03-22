@@ -1,5 +1,5 @@
 import React from 'react';
-import { Sparkles } from 'lucide-react';
+import { Sparkles, Upload, Globe, Brain } from 'lucide-react';
 import { Button } from '../components/Button';
 import { ThemeToggle } from '../components/ThemeToggle';
 import { Footer } from '../components/Footer';
@@ -12,6 +12,8 @@ interface Step0HomeProps {
 export function Step0Home({ onNext }: Step0HomeProps) {
   const [idea, setIdea] = React.useState('');
   const [isTyping, setIsTyping] = React.useState(false);
+  const [globeEnabled, setGlobeEnabled] = React.useState(false);
+  const [deepThinkEnabled, setDeepThinkEnabled] = React.useState(false);
   const typingTimeoutRef = React.useRef<NodeJS.Timeout>();
   const { theme } = useTheme();
 
@@ -51,6 +53,20 @@ export function Step0Home({ onNext }: Step0HomeProps) {
     "Create a social platform for book lovers to share reviews and recommendations",
     "Design an e-commerce platform specialized in handmade crafts"
   ];
+
+  const handleUpload = () => {
+    // Trigger file input click
+    const fileInput = document.getElementById('file-upload');
+    if (fileInput) {
+      fileInput.click();
+    }
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    // Handle file upload logic here
+    console.log('Files selected:', e.target.files);
+    // You can implement the file handling logic here
+  };
 
   return (
     <div className={`min-h-screen flex flex-col ${
@@ -95,6 +111,68 @@ export function Step0Home({ onNext }: Step0HomeProps) {
                       : 'bg-[#40414F] text-white placeholder-gray-400'
                   }`}
                 />
+                
+                {/* Bottom toolbar with buttons */}
+                <div className="absolute bottom-3 left-3 flex items-center space-x-2">
+                  {/* Upload button */}
+                  <button
+                    type="button"
+                    onClick={handleUpload}
+                    className={`p-2 rounded-full transition-colors duration-200 ${
+                      theme === 'light'
+                        ? 'text-gray-500 hover:bg-gray-100'
+                        : 'text-gray-400 hover:bg-gray-700'
+                    }`}
+                    title="Upload files"
+                  >
+                    <Upload size={18} />
+                  </button>
+                  
+                  {/* Hidden file input */}
+                  <input 
+                    type="file"
+                    id="file-upload"
+                    accept=".pdf,image/*"
+                    onChange={handleFileChange}
+                    className="hidden"
+                    multiple
+                  />
+                  
+                  {/* Globe toggle button */}
+                  <button
+                    type="button"
+                    onClick={() => setGlobeEnabled(!globeEnabled)}
+                    className={`p-2 rounded-full transition-colors duration-200 ${
+                      globeEnabled
+                        ? 'bg-indigo-600 text-white'
+                        : theme === 'light'
+                          ? 'text-gray-500 hover:bg-gray-100'
+                          : 'text-gray-400 hover:bg-gray-700'
+                    }`}
+                    title="Web search"
+                  >
+                    <Globe size={18} />
+                  </button>
+                  
+                  {/* DeepThink button */}
+                  <button
+                    type="button"
+                    onClick={() => setDeepThinkEnabled(!deepThinkEnabled)}
+                    className={`px-3 py-1 rounded-lg text-sm font-medium transition-colors duration-200 ${
+                      deepThinkEnabled
+                        ? 'bg-indigo-600 text-white'
+                        : theme === 'light'
+                          ? 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                          : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                    }`}
+                  >
+                    <div className="flex items-center space-x-1">
+                      <Brain size={16} />
+                      <span>DeepThink</span>
+                    </div>
+                  </button>
+                </div>
+                
                 <div className={`absolute bottom-3 right-3 transition-opacity duration-200 ${
                   isTyping ? 'opacity-0' : 'opacity-100'
                 }`}>
