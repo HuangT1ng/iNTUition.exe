@@ -63,7 +63,7 @@ const Modal = ({ isOpen, onClose, title, children }) => {
             transition={{ type: 'spring', damping: 25 }}
           >
             <div className="flex items-center justify-between mb-4">
-              <h2 className={`text-xl font-bold ${theme === 'light' ? 'text-gray-900' : 'text-white'}`}>{title}</h2>
+              <h2 className={`${theme === 'light' ? 'text-gray-900' : 'text-white'}`}>{title}</h2>
               <button
                 onClick={onClose}
                 className={`p-1 rounded-full transition-colors ${

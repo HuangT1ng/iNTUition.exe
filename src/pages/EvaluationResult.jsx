@@ -187,20 +187,20 @@ const EvaluationResult = () => {
   if (loading) {
     return (
       <div className={`flex flex-col items-center justify-center min-h-screen w-full ${
-        isDarkMode ? 'bg-gray-900 text-white' : 'bg-gray-50 text-gray-800'
+        isDarkMode ? 'bg-gray-900 text-white' : 'bg-gradient-to-br from-blue-50 via-cyan-50 to-slate-50'
       }`}>
         <div className="flex flex-col items-center max-w-md mx-auto p-8 rounded-xl shadow-lg">
           <div className="flex space-x-2 mb-4">
-            <div className="w-3 h-3 rounded-full bg-purple-500 animate-pulse" style={{ animationDelay: '0s' }}></div>
-            <div className="w-3 h-3 rounded-full bg-purple-500 animate-pulse" style={{ animationDelay: '0.2s' }}></div>
-            <div className="w-3 h-3 rounded-full bg-purple-500 animate-pulse" style={{ animationDelay: '0.4s' }}></div>
+            <div className="w-3 h-3 rounded-full bg-cyan-500 animate-pulse" style={{ animationDelay: '0s' }}></div>
+            <div className="w-3 h-3 rounded-full bg-cyan-500 animate-pulse" style={{ animationDelay: '0.2s' }}></div>
+            <div className="w-3 h-3 rounded-full bg-cyan-500 animate-pulse" style={{ animationDelay: '0.4s' }}></div>
           </div>
           <h2 className="text-xl font-semibold mb-6">Loading evaluation results...</h2>
           
           {/* Progress bar */}
           <div className="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden mb-2">
             <div 
-              className="h-full bg-purple-500 rounded-full transition-all duration-300 ease-out"
+              className="h-full bg-gradient-to-r from-blue-500 via-cyan-500 to-teal-500 rounded-full transition-all duration-300 ease-out"
               style={{ width: `${progress}%` }}
             ></div>
           </div>
@@ -212,23 +212,23 @@ const EvaluationResult = () => {
 
   return (
     <div className={`min-h-screen pb-16 ${
-      isDarkMode ? 'bg-gray-900 text-white' : 'bg-gray-50 text-gray-800'
+      isDarkMode ? 'bg-gray-900 text-white' : 'bg-gradient-to-br from-blue-50 via-cyan-50 to-slate-50'
     }`}>
       {/* Sticky header */}
       <header className={`sticky top-0 z-10 shadow-md py-4 ${
-        isDarkMode ? 'bg-purple-900' : 'bg-purple-100'
+        isDarkMode ? 'bg-blue-900' : 'bg-blue-100'
       }`}>
         <div className="container mx-auto px-4 flex justify-between items-center">
           <h1 className={`text-2xl font-bold ${
-            isDarkMode ? 'text-white' : 'text-purple-800'
+            isDarkMode ? 'text-white' : 'bg-gradient-to-r from-blue-600 via-cyan-600 to-teal-600 bg-clip-text text-transparent'
           }`}>Evaluation Results</h1>
           
           <button 
             onClick={handleDownload}
             className={`flex items-center gap-2 px-4 py-2 rounded-lg ${
               isDarkMode 
-                ? 'bg-purple-700 text-white hover:bg-purple-600' 
-                : 'bg-purple-500 text-white hover:bg-purple-600'
+                ? 'bg-blue-700 text-white hover:bg-blue-600' 
+                : 'bg-gradient-to-r from-blue-600 via-cyan-600 to-teal-600 text-white hover:opacity-90'
             } transition-colors`}
           >
             <FileDown size={18} />
@@ -239,7 +239,7 @@ const EvaluationResult = () => {
 
       <div className="container mx-auto px-4 py-8">
         <motion.div 
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+          className="grid grid-cols-1 gap-6 max-w-4xl mx-auto"
           variants={containerVariants}
           initial="hidden"
           animate="visible"
@@ -253,43 +253,100 @@ const EvaluationResult = () => {
               }`}
             >
               <div className={`p-4 ${
-                isDarkMode ? 'bg-purple-900' : 'bg-purple-100'
+                isDarkMode ? 'bg-blue-900' : 'bg-blue-100'
               }`}>
-                <h2 className={`text-lg font-semibold ${
-                  isDarkMode ? 'text-white' : 'text-purple-800'
-                }`}>Backend {result.backend}, Frontend {result.frontend}</h2>
+                <div className="flex justify-between items-center">
+                  <h2 className={`text-lg font-semibold ${
+                    isDarkMode ? 'text-white' : 'text-blue-800'
+                  }`}>Backend {result.backend}, Frontend {result.frontend}</h2>
+                  
+                  {result.id === 1 && (
+                    <button 
+                      className={`px-3 py-1.5 rounded-lg text-sm font-medium flex items-center space-x-1 ${
+                        isDarkMode 
+                          ? 'bg-blue-700 text-white hover:bg-blue-600' 
+                          : 'bg-gradient-to-r from-blue-600 via-cyan-600 to-teal-600 text-white hover:opacity-90'
+                      } transition-colors shadow-sm`}
+                      onClick={() => console.log('Visualize clicked')}
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z" />
+                        <circle cx="12" cy="12" r="3" />
+                      </svg>
+                      <span>Visualize</span>
+                    </button>
+                  )}
+                </div>
               </div>
               
               <div className="p-6">
                 <div className="mb-4">
-                  <div className="flex justify-between items-center mb-2">
-                    <span className="text-gray-600 dark:text-gray-300">Backend Score:</span>
-                    <span className={`font-bold ${
-                      result.backendScore >= 95 
-                        ? 'text-green-500' 
-                        : result.backendScore >= 90 
-                          ? 'text-blue-500' 
-                          : 'text-yellow-500'
-                    }`}>{result.backendScore.toFixed(1)}</span>
+                  <div className="mb-3">
+                    <div className="flex justify-between items-center mb-1">
+                      <span className="text-gray-600 dark:text-gray-300">Backend Score:</span>
+                      <span className={`font-bold ${
+                        result.backendScore >= 95 
+                          ? 'text-green-500' 
+                          : result.backendScore >= 85 
+                            ? 'text-yellow-500' 
+                            : 'text-red-500'
+                      }`}>{result.backendScore.toFixed(1)}</span>
+                    </div>
+                    <div className="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                      <div 
+                        className={`h-full rounded-full ${
+                          result.backendScore >= 95 
+                          ? 'bg-gradient-to-r from-green-400 to-green-500' 
+                          : result.backendScore >= 85 
+                            ? 'bg-gradient-to-r from-yellow-400 to-yellow-500' 
+                            : 'bg-gradient-to-r from-red-400 to-red-500'
+                        }`}
+                        style={{ width: `${result.backendScore}%` }}
+                      ></div>
+                    </div>
                   </div>
                   
-                  <div className="flex justify-between items-center mb-4">
-                    <span className="text-gray-600 dark:text-gray-300">Frontend Score:</span>
-                    <span className={`font-bold ${
-                      result.frontendScore >= 95 
-                        ? 'text-green-500' 
-                        : result.frontendScore >= 90 
-                          ? 'text-blue-500' 
-                          : 'text-yellow-500'
-                    }`}>{result.frontendScore.toFixed(1)}</span>
+                  <div className="mb-4">
+                    <div className="flex justify-between items-center mb-1">
+                      <span className="text-gray-600 dark:text-gray-300">Frontend Score:</span>
+                      <span className={`font-bold ${
+                        result.frontendScore >= 95 
+                          ? 'text-green-500' 
+                          : result.frontendScore >= 85 
+                            ? 'text-yellow-500' 
+                            : 'text-red-500'
+                      }`}>{result.frontendScore.toFixed(1)}</span>
+                    </div>
+                    <div className="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                      <div 
+                        className={`h-full rounded-full ${
+                          result.frontendScore >= 95 
+                          ? 'bg-gradient-to-r from-green-400 to-green-500' 
+                          : result.frontendScore >= 85 
+                            ? 'bg-gradient-to-r from-yellow-400 to-yellow-500' 
+                            : 'bg-gradient-to-r from-red-400 to-red-500'
+                        }`}
+                        style={{ width: `${result.frontendScore}%` }}
+                      ></div>
+                    </div>
                   </div>
                 </div>
 
-                <div>
-                  <h3 className={`text-md font-medium mb-2 ${
+                <div className={`p-5 rounded-lg ${
+                  isDarkMode ? 'bg-gray-700/50' : 'bg-gradient-to-r from-blue-50/50 via-cyan-50/50 to-teal-50/50'
+                }`}>
+                  <h3 className={`text-md font-medium mb-3 flex items-center ${
                     isDarkMode ? 'text-gray-200' : 'text-gray-700'
-                  }`}>Analysis</h3>
-                  <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">
+                  }`}>
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+                      <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+                    </svg>
+                    Analysis
+                  </h3>
+                  <p className={`${
+                    isDarkMode ? 'text-gray-300' : 'text-gray-600'
+                  } text-sm leading-relaxed`}>
                     {result.analysis}
                   </p>
                 </div>

@@ -113,9 +113,24 @@ const BackendFrontendOverview = () => {
 
   // Backend card data
   const backendCards = [
-    { title: "API Gateway", description: "Handles all incoming requests and routes them to appropriate services" },
-    { title: "Authentication Service", description: "Manages user authentication and authorization" },
-    { title: "Data Processing Service", description: "Processes and transforms data for frontend consumption" }
+    { 
+      title: "Microservices Architecture",
+      description: "Distributed system of independent services communicating via APIs",
+      icon: "M6 3a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 01-1 1H7a1 1 0 01-1-1V3zM11 3a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 01-1 1h-2a1 1 0 01-1-1V3zM6 8a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 01-1 1H7a1 1 0 01-1-1V8zM11 8a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 01-1 1h-2a1 1 0 01-1-1V8zM16 8a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 01-1 1h-2a1 1 0 01-1-1V8z",
+      techStack: ["Node.js", "Express", "Docker", "Kubernetes", "MongoDB"]
+    },
+    { 
+      title: "Serverless Architecture",
+      description: "Event-driven functions deployed without managing server infrastructure",
+      icon: "M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM14 11a1 1 0 011 1v1h1a1 1 0 110 2h-1v1a1 1 0 11-2 0v-1h-1a1 1 0 110-2h1v-1a1 1 0 011-1z",
+      techStack: ["AWS Lambda", "API Gateway", "DynamoDB", "CloudFormation", "Firebase"]
+    },
+    { 
+      title: "Event-Driven Architecture",
+      description: "Decoupled components communicating through events with message brokers",
+      icon: "M13 10V3L4 14h7v7l9-11h-7z",
+      techStack: ["Kafka", "RabbitMQ", "Spring Boot", "Redis", "PostgreSQL", "GraphQL", "Apollo"]
+    }
   ];
 
   // Frontend card data with videos
@@ -134,6 +149,13 @@ const BackendFrontendOverview = () => {
     "#0D9488"  // teal-600 for backend 2
   ];
 
+  // Gradients for each backend component
+  const gradients = [
+    "from-blue-500 to-blue-700", // backend 0
+    "from-cyan-500 to-cyan-700", // backend 1
+    "from-teal-500 to-teal-700"  // backend 2
+  ];
+
   const handleEvaluateClick = () => {
     setShowEvaluateModal(true);
   };
@@ -146,7 +168,7 @@ const BackendFrontendOverview = () => {
   return (
     <div className={`relative w-full min-h-screen px-4 py-8 ${theme === 'light' ? 'bg-gradient-to-br from-blue-50 via-cyan-50 to-slate-50' : 'bg-[#343541]'}`}>
       <h2 className={`text-3xl font-bold text-center mb-12 ${theme === 'light' ? 'bg-gradient-to-r from-blue-600 via-cyan-600 to-teal-600 bg-clip-text text-transparent' : 'text-white'}`}>
-        Backend to Frontend System Overview
+        Backend to Frontend System Design Overview
       </h2>
 
       <div className="relative flex flex-col items-center" ref={containerRef}>
@@ -156,17 +178,39 @@ const BackendFrontendOverview = () => {
             <motion.div
               key={`backend-${index}`}
               ref={backendRefs.current[index]}
-              className={`w-64 p-4 rounded-lg shadow-md ${theme === 'light' ? 'bg-white/90 border border-blue-100' : 'bg-[#40414F] border border-gray-700'} relative z-10`}
+              className={`p-4 rounded-lg shadow-lg ${theme === 'light' ? 'bg-white/90 border border-blue-100' : 'bg-[#40414F] border border-gray-700'} relative z-10 w-80`}
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: backendVisible[index] ? 1 : 0, y: backendVisible[index] ? 0 : -20 }}
               transition={{ duration: 0.5 }}
               style={{ 
                 position: 'relative',
-                left: index === 0 ? '-200px' : index === 2 ? '200px' : '0'
+                left: index === 0 ? '-100px' : index === 2 ? '100px' : '0',
+                display: 'flex',
+                flexDirection: 'column',
+                height: '100%'
               }}
             >
-              <h3 className={`text-lg font-semibold mb-2 ${theme === 'light' ? 'text-blue-700' : 'text-white'}`}>{card.title}</h3>
-              <p className={`text-sm ${theme === 'light' ? 'text-gray-700' : 'text-gray-300'}`}>{card.description}</p>
+              <div className={`w-10 h-10 rounded-full mb-4 flex items-center justify-center bg-gradient-to-br ${gradients[index]} text-white`}>
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d={card.icon} />
+                </svg>
+              </div>
+              
+              <h3 className={`text-lg font-semibold mb-2 ${theme === 'light' ? `text-${colors[index].substring(1)}` : 'text-white'}`}>{card.title}</h3>
+              <p className={`text-sm ${theme === 'light' ? 'text-gray-700' : 'text-gray-300'} flex-grow`}>{card.description}</p>
+              
+              <div className={`mt-4 flex flex-wrap gap-2`}>
+                {card.techStack.map((tech, techIndex) => (
+                  <span 
+                    key={`${index}-tech-${techIndex}`}
+                    className={`px-2 py-1 text-xs rounded-full ${theme === 'light' 
+                      ? 'bg-teal-50 text-teal-700' 
+                      : 'bg-gray-700 text-teal-200'}`}
+                  >
+                    {tech}
+                  </span>
+                ))}
+              </div>
             </motion.div>
           ))}
         </div>
@@ -300,26 +344,26 @@ const BackendFrontendOverview = () => {
             </motion.div>
           ))}
         </div>
+        
+        {/* Evaluate Button - Moved below the last frontend card */}
+        <motion.button
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: evaluateVisible ? 1 : 0, y: evaluateVisible ? 0 : 20 }}
+          transition={{ duration: 0.3, delay: 0.2 }}
+          className={`mt-12 ml-auto mr-4 px-6 py-3 rounded-xl shadow-lg flex items-center justify-center gap-2 ${
+            theme === 'light' 
+              ? 'bg-gradient-to-r from-blue-600 via-cyan-600 to-teal-600 text-white' 
+              : 'bg-blue-600 text-white'
+          } hover:shadow-xl transform hover:scale-105 transition-all`}
+          onClick={handleEvaluateClick}
+        >
+          <span className="text-lg font-semibold">Evaluate</span>
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+            <path fillRule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
+          </svg>
+        </motion.button>
       </div>
 
-      {/* Score Button */}
-      <motion.button
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: evaluateVisible ? 1 : 0, y: evaluateVisible ? 0 : 20 }}
-        transition={{ duration: 0.3, delay: 0.2 }}
-        className={`fixed bottom-4 right-4 px-6 py-3 rounded-xl shadow-lg flex items-center justify-center gap-2 ${
-          theme === 'light' 
-            ? 'bg-gradient-to-r from-blue-600 via-cyan-600 to-teal-600 text-white' 
-            : 'bg-blue-600 text-white'
-        } hover:shadow-xl transform hover:scale-105 transition-all`}
-        onClick={handleEvaluateClick}
-      >
-        <span className="text-lg font-semibold">Evaluate</span>
-        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-          <path fillRule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
-        </svg>
-      </motion.button>
-      
       {/* Evaluate Modal */}
       <EvaluateModal 
         isOpen={showEvaluateModal}

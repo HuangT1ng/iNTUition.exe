@@ -18,6 +18,7 @@ export function PromptPage({ onNext }: PromptPageProps) {
   const [globeEnabled, setGlobeEnabled] = React.useState(false);
   const [deepThinkEnabled, setDeepThinkEnabled] = React.useState(false);
   const [showDesign, setShowDesign] = React.useState(false);
+  const [isLoading, setIsLoading] = React.useState(false);
   const typingTimeoutRef = React.useRef<ReturnType<typeof setTimeout>>();
   const { theme } = useTheme();
   const navigate = useNavigate();
@@ -26,8 +27,13 @@ export function PromptPage({ onNext }: PromptPageProps) {
     e.preventDefault();
     if (idea.trim()) {
       onNext(idea);
-      // Navigate to the backend-frontend-overview page
-      navigate('/backend-frontend-overview');
+      // Show loading for 2 seconds before navigating
+      setIsLoading(true);
+      setTimeout(() => {
+        setIsLoading(false);
+        // Navigate to the backend-frontend-overview page
+        navigate('/backend-frontend-overview');
+      }, 2000);
     }
   };
 
@@ -192,10 +198,21 @@ export function PromptPage({ onNext }: PromptPageProps) {
                 }`}>
                   <Button 
                     type="submit"
-                    disabled={!idea.trim()}
-                    className="py-2 px-4 text-sm shadow-sm"
+                    disabled={!idea.trim() || isLoading}
+                    className="py-2 px-4 text-sm shadow-sm relative"
                   >
-                    Generate Design
+                    {isLoading ? (
+                      <div className="flex items-center space-x-2">
+                        <div className="flex space-x-1">
+                          <div className="w-2 h-2 rounded-full bg-white animate-pulse" style={{ animationDelay: '0s' }}></div>
+                          <div className="w-2 h-2 rounded-full bg-white animate-pulse" style={{ animationDelay: '0.2s' }}></div>
+                          <div className="w-2 h-2 rounded-full bg-white animate-pulse" style={{ animationDelay: '0.4s' }}></div>
+                        </div>
+                        <span>Generating...</span>
+                      </div>
+                    ) : (
+                      "Generate Design"
+                    )}
                   </Button>
                 </div>
               </div>

@@ -21,7 +21,8 @@ import {
   Maximize, 
   MousePointer, 
   Sun,
-  CheckCircle 
+  CheckCircle,
+  Layers
 } from 'lucide-react';
 import Modal from './Modal';
 import { useTheme } from '../context/ThemeContext';
@@ -173,7 +174,10 @@ const evaluationSteps = [
   }
 ];
 
-const ProcessStep = ({ step, status, index, activeStep }) => {
+// Calculate total number of combinations (20 metrics × 15 combinations each)
+const totalCombinations = 20 * 15;
+
+const ProcessStep = ({ step, status, index, activeStep, combinations }) => {
   const isActive = status === 'active';
   const isCompleted = status === 'completed';
   const isPending = status === 'pending';
@@ -196,7 +200,7 @@ const ProcessStep = ({ step, status, index, activeStep }) => {
           {isActive && (
             <motion.div
               key="active-pulse"
-              className="absolute inset-0 bg-purple-500 rounded-full"
+              className="absolute inset-0 bg-cyan-500 rounded-full"
               initial={{ opacity: 0.5, scale: 1 }}
               animate={{ opacity: 0, scale: 1.5 }}
               exit={{ opacity: 0 }}
@@ -207,9 +211,9 @@ const ProcessStep = ({ step, status, index, activeStep }) => {
         
         <div className={`w-12 h-12 rounded-full flex items-center justify-center ${
           isActive 
-            ? 'bg-purple-500 text-white' 
+            ? 'bg-cyan-500 text-white' 
             : isCompleted 
-              ? 'bg-green-500 text-white' 
+              ? 'bg-teal-500 text-white' 
               : 'bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400'
         }`}>
           {isCompleted ? (
@@ -225,9 +229,9 @@ const ProcessStep = ({ step, status, index, activeStep }) => {
         <div className="flex items-center gap-2">
           <h3 className={`font-medium text-base ${
             isActive 
-              ? 'text-purple-500 dark:text-purple-400' 
+              ? 'text-cyan-500 dark:text-cyan-400' 
               : isCompleted 
-                ? 'text-green-500 dark:text-green-400' 
+                ? 'text-teal-500 dark:text-teal-400' 
                 : 'text-gray-700 dark:text-gray-300'
           }`}>
             {step.title}
@@ -243,6 +247,22 @@ const ProcessStep = ({ step, status, index, activeStep }) => {
         <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
           {step.description}
         </p>
+        
+        {/* Combination counter for active metrics */}
+        {isActive && combinations > 0 && (
+          <div className="flex items-center mt-2 text-xs text-cyan-600 dark:text-cyan-400">
+            <Layers size={14} className="mr-1" />
+            <span>Calculating {combinations} combinations...</span>
+          </div>
+        )}
+        
+        {/* Show completed combinations for completed metrics */}
+        {isCompleted && (
+          <div className="flex items-center mt-2 text-xs text-teal-600 dark:text-teal-400">
+            <CheckCircle size={14} className="mr-1" />
+            <span>15 combinations processed</span>
+          </div>
+        )}
       </div>
     </div>
   );
@@ -255,6 +275,8 @@ const EvaluateModal = ({ isOpen, onClose, onComplete }) => {
   const [currentStep, setCurrentStep] = useState(0);
   const [isProcessing, setIsProcessing] = useState(true);
   const [isComplete, setIsComplete] = useState(false);
+  const [combinationsProcessed, setCombinationsProcessed] = useState(0);
+  const [currentCombinations, setCurrentCombinations] = useState(0);
   const metricsContainerRef = useRef(null);
   
   // Reset state when modal opens or closes
@@ -263,6 +285,8 @@ const EvaluateModal = ({ isOpen, onClose, onComplete }) => {
       setCurrentStep(0);
       setIsProcessing(true);
       setIsComplete(false);
+      setCombinationsProcessed(0);
+      setCurrentCombinations(0);
       
       // Start processing
       startProcessing();
@@ -279,10 +303,18 @@ const EvaluateModal = ({ isOpen, onClose, onComplete }) => {
     }
   }, [currentStep]);
   
-  // Simulate the processing
+  // Simulate the processing of combinations for each metric
   const startProcessing = useCallback(() => {
-    // Simulate each step taking 1 second for a faster demo (with 20 steps)
+    // Simulate each step taking 0.5 seconds for a faster demo (with 20 steps)
     const interval = setInterval(() => {
+      // Simulate processing combinations for the current metric
+      setCurrentCombinations(prev => {
+        // Generate a random number of combinations to process between 8-15
+        return Math.floor(Math.random() * 8) + 8;
+      });
+      
+      setCombinationsProcessed(prev => prev + 15); // Each metric processes 15 combinations
+      
       setCurrentStep(prevStep => {
         const nextStep = prevStep + 1;
         
@@ -291,10 +323,11 @@ const EvaluateModal = ({ isOpen, onClose, onComplete }) => {
           clearInterval(interval);
           setIsProcessing(false);
           setIsComplete(true);
+          setCurrentCombinations(0);
           
           // Call the onComplete callback
           if (onComplete) {
-            setTimeout(onComplete, 1000);
+            setTimeout(onComplete, 300); // Also reduce this timeout for consistency
           }
           
           return prevStep;
@@ -302,7 +335,7 @@ const EvaluateModal = ({ isOpen, onClose, onComplete }) => {
         
         return nextStep;
       });
-    }, 1000);
+    }, 300);
     
     // Clean up interval on unmount
     return () => clearInterval(interval);
@@ -336,7 +369,13 @@ const EvaluateModal = ({ isOpen, onClose, onComplete }) => {
     <Modal 
       isOpen={isOpen} 
       onClose={handleClose} // Always allow closing
-      title="System Evaluation"
+      title={
+        <div className="font-bold text-2xl">
+          <span className="bg-gradient-to-r from-blue-600 via-cyan-600 to-teal-600 bg-clip-text text-transparent">
+            Evaluating All Combinations
+          </span>
+        </div>
+      }
     >
       <div className="py-2 px-3">
         {/* Category Headings */}
@@ -349,12 +388,29 @@ const EvaluateModal = ({ isOpen, onClose, onComplete }) => {
           </div>
         </div>
         
-        {/* Progress indicator */}
-        <div className="mb-4 h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+        {/* Progress indicator with combination counter */}
+        <div className="mb-1 h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
           <div 
-            className="h-full bg-purple-500 rounded-full transition-all duration-300 ease-out"
+            className="h-full bg-gradient-to-r from-blue-500 via-cyan-500 to-teal-500 rounded-full transition-all duration-300 ease-out"
             style={{ width: isComplete ? '100%' : `${(currentStep / evaluationSteps.length) * 100}%` }}
           ></div>
+        </div>
+        <div className="mb-4 flex justify-between">
+          <div className="text-xs text-gray-500 dark:text-gray-400">
+            {isComplete 
+              ? "All metrics evaluated" 
+              : `Processing metric ${currentStep + 1} of ${evaluationSteps.length}`
+            }
+          </div>
+          <div className="text-xs text-gray-500 dark:text-gray-400 flex items-center">
+            <Layers size={12} className="mr-1" />
+            <span>
+              {isComplete 
+                ? `${totalCombinations} combinations completed` 
+                : `${combinationsProcessed} of ${totalCombinations} combinations`
+              }
+            </span>
+          </div>
         </div>
         
         {/* Processing steps */}
@@ -367,6 +423,7 @@ const EvaluateModal = ({ isOpen, onClose, onComplete }) => {
                   status={getStepStatus(index)}
                   index={index}
                   activeStep={currentStep}
+                  combinations={index === currentStep ? currentCombinations : 0}
                 />
               </div>
             ))}
@@ -380,14 +437,14 @@ const EvaluateModal = ({ isOpen, onClose, onComplete }) => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
-              className="mt-2 p-4 bg-green-50 dark:bg-green-900/20 rounded-lg border border-green-100 dark:border-green-800"
+              className="mt-2 p-4 bg-teal-50 dark:bg-teal-900/20 rounded-lg border border-teal-100 dark:border-teal-800"
             >
               <div className="flex items-center">
-                <CheckCircle className="text-green-500 mr-3" size={24} />
+                <CheckCircle className="text-teal-500 mr-3" size={24} />
                 <div>
-                  <h3 className="font-semibold text-green-700 dark:text-green-300">Evaluation Complete!</h3>
-                  <p className="text-sm text-green-600 dark:text-green-400 mt-1">
-                    All 20 metrics have been successfully evaluated.
+                  <h3 className="font-semibold text-teal-700 dark:text-teal-300">Evaluation Complete!</h3>
+                  <p className="text-sm text-teal-600 dark:text-teal-400 mt-1">
+                    All 20 metrics and 300 metric combinations have been successfully evaluated.
                   </p>
                 </div>
               </div>
@@ -402,7 +459,7 @@ const EvaluateModal = ({ isOpen, onClose, onComplete }) => {
             className={`px-6 py-2.5 rounded-lg font-medium transition-colors ${
               isProcessing
                 ? 'bg-gray-300 text-gray-700 hover:bg-gray-400 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600 cursor-not-allowed opacity-70'
-                : 'bg-purple-500 text-white hover:bg-purple-600 dark:bg-purple-600 dark:hover:bg-purple-700'
+                : 'bg-gradient-to-r from-blue-600 via-cyan-600 to-teal-600 text-white hover:opacity-90 dark:from-blue-600 dark:via-cyan-700 dark:to-teal-700'
             }`}
             disabled={isProcessing}
           >
