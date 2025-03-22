@@ -372,7 +372,7 @@ const EvaluateModal = ({ isOpen, onClose, onComplete }) => {
       title={
         <div className="font-bold text-2xl">
           <span className="bg-gradient-to-r from-blue-600 via-cyan-600 to-teal-600 bg-clip-text text-transparent">
-            Evaluating All Combinations
+            Evaluating All Combinations 
           </span>
         </div>
       }
