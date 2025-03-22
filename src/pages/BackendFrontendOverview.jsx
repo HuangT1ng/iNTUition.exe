@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTheme } from '../context/ThemeContext';
+import EvaluateModal from '../components/EvaluateModal';
 
 const BackendFrontendOverview = () => {
   const { theme } = useTheme();
@@ -8,6 +9,7 @@ const BackendFrontendOverview = () => {
   const [frontendVisible, setFrontendVisible] = useState([false, false, false, false, false]);
   const [arrowSets, setArrowSets] = useState([false, false, false]);
   const [evaluateVisible, setEvaluateVisible] = useState(false);
+  const [showEvaluateModal, setShowEvaluateModal] = useState(false);
   
   // Create refs for all cards to get their positions
   const backendRefs = useRef([React.createRef(), React.createRef(), React.createRef()]);
@@ -132,6 +134,15 @@ const BackendFrontendOverview = () => {
     "#0D9488"  // teal-600 for backend 2
   ];
 
+  const handleEvaluateClick = () => {
+    setShowEvaluateModal(true);
+  };
+
+  const handleEvaluateComplete = () => {
+    console.log('Evaluation complete!');
+    // You can add additional logic here for what happens after evaluation
+  };
+
   return (
     <div className={`relative w-full min-h-screen px-4 py-8 ${theme === 'light' ? 'bg-gradient-to-br from-blue-50 via-cyan-50 to-slate-50' : 'bg-[#343541]'}`}>
       <h2 className={`text-3xl font-bold text-center mb-12 ${theme === 'light' ? 'bg-gradient-to-r from-blue-600 via-cyan-600 to-teal-600 bg-clip-text text-transparent' : 'text-white'}`}>
@@ -255,7 +266,7 @@ const BackendFrontendOverview = () => {
             <motion.div
               key={`frontend-${index}`}
               ref={frontendRefs.current[index]}
-              className={`w-52 rounded-lg shadow-md overflow-hidden ${theme === 'light' ? 'bg-white/90 border border-cyan-200' : 'bg-[#40414F] border border-gray-700'} relative z-10`}
+              className={`w-52 h-80 rounded-lg shadow-md overflow-hidden ${theme === 'light' ? 'bg-white/90 border border-cyan-200' : 'bg-[#40414F] border border-gray-700'} relative z-10`}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: frontendVisible[index] ? 1 : 0, y: frontendVisible[index] ? 0 : 20 }}
               transition={{ duration: 0.5 }}
@@ -270,15 +281,16 @@ const BackendFrontendOverview = () => {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: 0.3, duration: 0.5 }}
+                  className="h-full"
                 >
                   <video 
                     width="100%" 
-                    height="auto" 
+                    height="100%" 
                     autoPlay 
                     muted 
                     loop 
                     playsInline
-                    className="w-full"
+                    className="w-full h-full object-cover"
                   >
                     <source src={card.video} type="video/mp4" />
                     Your browser does not support the video tag.
@@ -300,13 +312,20 @@ const BackendFrontendOverview = () => {
             ? 'bg-gradient-to-r from-blue-600 via-cyan-600 to-teal-600 text-white' 
             : 'bg-blue-600 text-white'
         } hover:shadow-xl transform hover:scale-105 transition-all`}
-        onClick={() => {}}
+        onClick={handleEvaluateClick}
       >
         <span className="text-lg font-semibold">Evaluate</span>
         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
           <path fillRule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
         </svg>
       </motion.button>
+      
+      {/* Evaluate Modal */}
+      <EvaluateModal 
+        isOpen={showEvaluateModal}
+        onClose={() => setShowEvaluateModal(false)}
+        onComplete={handleEvaluateComplete}
+      />
     </div>
   );
 };
