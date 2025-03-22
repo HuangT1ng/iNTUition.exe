@@ -10,7 +10,7 @@ export function ThemeToggle() {
       onClick={toggleTheme}
       className={`p-2 rounded-lg transition-colors duration-200 ${
         theme === 'light' 
-          ? 'bg-gray-200 hover:bg-gray-300 text-gray-800' 
+          ? 'bg-blue-100 hover:bg-blue-200 text-blue-700' 
           : 'bg-[#40414F] hover:bg-[#4A4B59] text-gray-300'
       }`}
       aria-label="Toggle theme"

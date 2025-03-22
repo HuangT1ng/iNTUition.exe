@@ -1,5 +1,5 @@
 import React from 'react';
-import { Step0Home } from './pages/Step0Home';
+import { PromptPage } from './pages/PromptPage';
 
 function App() {
   const [projectIdea, setProjectIdea] = React.useState('');
@@ -14,7 +14,7 @@ function App() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <Step0Home onNext={handleSaveIdea} />
+      <PromptPage onNext={handleSaveIdea} />
     </div>
   );
 }
