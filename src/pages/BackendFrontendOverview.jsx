@@ -7,6 +7,7 @@ const BackendFrontendOverview = () => {
   const [backendVisible, setBackendVisible] = useState([false, false, false]);
   const [frontendVisible, setFrontendVisible] = useState([false, false, false, false, false]);
   const [arrowSets, setArrowSets] = useState([false, false, false]);
+  const [evaluateVisible, setEvaluateVisible] = useState(false);
   
   // Create refs for all cards to get their positions
   const backendRefs = useRef([React.createRef(), React.createRef(), React.createRef()]);
@@ -96,6 +97,9 @@ const BackendFrontendOverview = () => {
     arrowTimers.push(setTimeout(() => setArrowSets(prev => [prev[0], true, prev[2]]), 3200));
     // Third backend card's arrows appear 500ms after that
     arrowTimers.push(setTimeout(() => setArrowSets(prev => [prev[0], prev[1], true]), 3700));
+    
+    // Show evaluate button after all arrows appear
+    setTimeout(() => setEvaluateVisible(true), 4200);
 
     // Cleanup timers
     return () => {
@@ -112,13 +116,13 @@ const BackendFrontendOverview = () => {
     { title: "Data Processing Service", description: "Processes and transforms data for frontend consumption" }
   ];
 
-  // Frontend card data
-  const frontendCards = [
-    { title: "User Dashboard", description: "Main user interface with overview" },
-    { title: "Profile Management", description: "User profile settings and preferences" },
-    { title: "Data Visualization", description: "Charts and graphs for data analysis" },
-    { title: "Content Management", description: "Interface for managing content" },
-    { title: "Settings Panel", description: "Application configuration options" }
+  // Frontend card data with videos
+  const frontendVideos = [
+    { video: "/src/videos/Frontend_1.mp4" },
+    { video: "/src/videos/Frontend_2.mp4" },
+    { video: "/src/videos/Frontend_3.mp4" },
+    { video: "/src/videos/Frontend_4.mp4" },
+    { video: "/src/videos/Frontend_5.mp4" }
   ];
 
   // Colors for each backend component
@@ -245,13 +249,13 @@ const BackendFrontendOverview = () => {
           </g>
         </svg>
 
-        {/* Frontend Cards */}
+        {/* Frontend Cards - Video Only */}
         <div className="flex justify-center flex-wrap gap-4 w-full">
-          {frontendCards.map((card, index) => (
+          {frontendVideos.map((card, index) => (
             <motion.div
               key={`frontend-${index}`}
               ref={frontendRefs.current[index]}
-              className={`w-52 p-4 rounded-lg shadow-md ${theme === 'light' ? 'bg-white/90 border border-cyan-200' : 'bg-[#40414F] border border-gray-700'} relative z-10`}
+              className={`w-52 rounded-lg shadow-md overflow-hidden ${theme === 'light' ? 'bg-white/90 border border-cyan-200' : 'bg-[#40414F] border border-gray-700'} relative z-10`}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: frontendVisible[index] ? 1 : 0, y: frontendVisible[index] ? 0 : 20 }}
               transition={{ duration: 0.5 }}
@@ -260,8 +264,27 @@ const BackendFrontendOverview = () => {
                 left: (index - 2) * 60 + 'px' 
               }}
             >
-              <h3 className={`text-md font-semibold mb-2 ${theme === 'light' ? 'text-blue-700' : 'text-white'}`}>{card.title}</h3>
-              <p className={`text-xs ${theme === 'light' ? 'text-gray-700' : 'text-gray-300'}`}>{card.description}</p>
+              {/* Video-only content */}
+              {frontendVisible[index] && (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.3, duration: 0.5 }}
+                >
+                  <video 
+                    width="100%" 
+                    height="auto" 
+                    autoPlay 
+                    muted 
+                    loop 
+                    playsInline
+                    className="w-full"
+                  >
+                    <source src={card.video} type="video/mp4" />
+                    Your browser does not support the video tag.
+                  </video>
+                </motion.div>
+              )}
             </motion.div>
           ))}
         </div>
@@ -270,8 +293,8 @@ const BackendFrontendOverview = () => {
       {/* Score Button */}
       <motion.button
         initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.3, delay: 4.0 }}
+        animate={{ opacity: evaluateVisible ? 1 : 0, y: evaluateVisible ? 0 : 20 }}
+        transition={{ duration: 0.3, delay: 0.2 }}
         className={`fixed bottom-4 right-4 px-6 py-3 rounded-xl shadow-lg flex items-center justify-center gap-2 ${
           theme === 'light' 
             ? 'bg-gradient-to-r from-blue-600 via-cyan-600 to-teal-600 text-white' 
