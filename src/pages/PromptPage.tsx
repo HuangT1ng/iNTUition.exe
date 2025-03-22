@@ -61,24 +61,6 @@ export function PromptPage({ onNext }: PromptPageProps) {
     };
   }, []);
 
-  const examples = [
-    {
-      text: "I want to build a task management app with real-time collaboration",
-      icon: "✓",
-      gradient: "from-blue-400 to-cyan-400"
-    },
-    {
-      text: "Create a social platform for book lovers to share reviews and recommendations",
-      icon: "♥",
-      gradient: "from-cyan-400 to-teal-400"
-    },
-    {
-      text: "Design an e-commerce platform specialized in handmade crafts",
-      icon: "★",
-      gradient: "from-teal-400 to-emerald-400"
-    }
-  ];
-
   const handleUpload = () => {
     // Trigger file input click
     const fileInput = document.getElementById('file-upload');
@@ -109,26 +91,26 @@ export function PromptPage({ onNext }: PromptPageProps) {
       </header>
       
       <main className="flex-1 flex flex-col">
-        <div className="flex-1 flex flex-col items-center justify-center px-4 py-12 sm:px-6 lg:px-8">
+        <div className="flex-1 flex flex-col items-center justify-center px-4 py-10 sm:px-6 lg:px-8">
           <div className="w-full max-w-2xl space-y-10 text-center">
-            <div className={`space-y-4 ${
+            <div className={`space-y-5 ${
               theme === 'light' ? 'text-blue-700' : 'text-white'
             }`}>
               <div className="flex items-center justify-center space-x-3">
-                <Sparkles className="w-8 h-8" />
+                <Sparkles className="w-11 h-11" />
                 <h1 className={`text-4xl font-bold tracking-tight ${
                   theme === 'light' ? 'bg-gradient-to-r from-blue-600 via-cyan-600 to-teal-600 bg-clip-text text-transparent' : ''
                 }`}>Unified Planner-to-Designer</h1>
               </div>
-              <p className={`text-lg ${
+              <p className={`text-lg max-w-2xl mx-auto ${
                 theme === 'light' ? 'text-gray-700' : 'text-gray-300'
               }`}>
                 Transform your idea into a complete technical product using AI
               </p>
             </div>
 
-            <form onSubmit={handleSubmit} className="relative">
-              <div className={`relative rounded-2xl shadow-sm ${
+            <form onSubmit={handleSubmit} className="relative w-full">
+              <div className={`relative rounded-xl shadow-md ${
                 theme === 'light'
                   ? 'bg-white/90 border border-blue-100'
                   : 'bg-[#40414F] border border-gray-700'
@@ -137,7 +119,7 @@ export function PromptPage({ onNext }: PromptPageProps) {
                   value={idea}
                   onChange={handleTyping}
                   placeholder="Describe your product idea in detail..."
-                  className={`w-full h-32 p-4 rounded-2xl resize-none focus:outline-none focus:ring-0 ${
+                  className={`w-full h-44 p-5 rounded-xl resize-none focus:outline-none focus:ring-0 text-base ${
                     theme === 'light'
                       ? 'bg-white/90 text-gray-900 placeholder-gray-400'
                       : 'bg-[#40414F] text-white placeholder-gray-400'
@@ -145,19 +127,19 @@ export function PromptPage({ onNext }: PromptPageProps) {
                 />
                 
                 {/* Bottom toolbar with buttons */}
-                <div className="absolute bottom-3 left-3 flex items-center space-x-2">
+                <div className="absolute bottom-3 left-3 flex items-center space-x-3">
                   {/* Upload button */}
                   <button
                     type="button"
                     onClick={handleUpload}
-                    className={`p-2 rounded-full transition-colors duration-200 ${
+                    className={`p-2.5 rounded-full transition-colors duration-200 ${
                       theme === 'light'
                         ? 'text-blue-600 hover:bg-blue-50'
                         : 'text-gray-400 hover:bg-gray-700'
                     }`}
                     title="Upload files"
                   >
-                    <Upload size={18} />
+                    <Upload size={20} />
                   </button>
                   
                   {/* Hidden file input */}
@@ -174,7 +156,7 @@ export function PromptPage({ onNext }: PromptPageProps) {
                   <button
                     type="button"
                     onClick={() => setGlobeEnabled(!globeEnabled)}
-                    className={`p-2 rounded-full transition-colors duration-200 ${
+                    className={`p-3 rounded-full transition-colors duration-200 ${
                       globeEnabled
                         ? 'bg-cyan-600 text-white'
                         : theme === 'light'
@@ -183,14 +165,14 @@ export function PromptPage({ onNext }: PromptPageProps) {
                     }`}
                     title="Web search"
                   >
-                    <Globe size={18} />
+                    <Globe size={20} />
                   </button>
                   
                   {/* DeepThink button */}
                   <button
                     type="button"
                     onClick={() => setDeepThinkEnabled(!deepThinkEnabled)}
-                    className={`px-3 py-1 rounded-lg text-sm font-medium transition-colors duration-200 ${
+                    className={`px-3.5 py-1.5 rounded-lg text-sm font-medium transition-colors duration-200 ${
                       deepThinkEnabled
                         ? 'bg-teal-600 text-white'
                         : theme === 'light'
@@ -198,27 +180,25 @@ export function PromptPage({ onNext }: PromptPageProps) {
                           : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
                     }`}
                   >
-                    <div className="flex items-center space-x-1">
-                      <Brain size={16} />
+                    <div className="flex items-center space-x-2">
+                      <Brain size={18} />
                       <span>DeepThink</span>
                     </div>
                   </button>
                 </div>
                 
-                <div className={`absolute bottom-3 right-3 transition-opacity duration-200 ${
-                  isTyping ? 'opacity-0' : 'opacity-100'
-                }`}>
+                <div className="absolute bottom-3 right-3">
                   <Button 
                     type="submit"
                     disabled={!idea.trim() || isLoading}
-                    className="py-2 px-4 text-sm shadow-sm relative"
+                    className="py-2.5 px-5 text-sm shadow-md relative"
                   >
                     {isLoading ? (
                       <div className="flex items-center space-x-2">
                         <div className="flex space-x-1">
-                          <div className="w-2 h-2 rounded-full bg-white animate-pulse" style={{ animationDelay: '0s' }}></div>
-                          <div className="w-2 h-2 rounded-full bg-white animate-pulse" style={{ animationDelay: '0.2s' }}></div>
-                          <div className="w-2 h-2 rounded-full bg-white animate-pulse" style={{ animationDelay: '0.4s' }}></div>
+                          <div className="w-2.5 h-2.5 rounded-full bg-white animate-pulse" style={{ animationDelay: '0s' }}></div>
+                          <div className="w-2.5 h-2.5 rounded-full bg-white animate-pulse" style={{ animationDelay: '0.2s' }}></div>
+                          <div className="w-2.5 h-2.5 rounded-full bg-white animate-pulse" style={{ animationDelay: '0.4s' }}></div>
                         </div>
                         <span>Generating...</span>
                       </div>
@@ -229,60 +209,6 @@ export function PromptPage({ onNext }: PromptPageProps) {
                 </div>
               </div>
             </form>
-
-            <div className="space-y-6">
-              <h2 className={`text-sm text-center uppercase tracking-wider font-medium ${
-                theme === 'light' ? 'text-blue-500' : 'text-gray-400'
-              }`}>
-                Example Ideas
-              </h2>
-              <div className="grid gap-3">
-                {examples.map((example, index) => (
-                  <button
-                    key={index}
-                    onClick={() => setIdea(example.text)}
-                    className={`p-4 rounded-xl text-left transition-all duration-300 relative overflow-hidden group ${
-                      theme === 'light'
-                        ? 'bg-white/90 text-gray-700 shadow-sm border border-cyan-100'
-                        : 'bg-[#40414F] text-gray-300 border border-gray-700'
-                    }`}
-                  >
-                    {/* Background gradient on hover */}
-                    <div className={`absolute inset-0 opacity-0 group-hover:opacity-10 transition-opacity duration-300 bg-gradient-to-r ${example.gradient}`}></div>
-                    
-                    {/* Icon circle */}
-                    <div className="flex items-start mb-1">
-                      <div className={`flex items-center justify-center w-8 h-8 rounded-full mr-2 ${
-                        theme === 'light' 
-                          ? `bg-gradient-to-br ${example.gradient} text-white` 
-                          : 'bg-gray-700 text-cyan-300'
-                      }`}>
-                        <span>{example.icon}</span>
-                      </div>
-                      <div className="flex-1">
-                        <p className={`font-medium ${
-                          theme === 'light' 
-                            ? 'text-gray-800' 
-                            : 'text-gray-200'
-                        }`}>
-                          {example.text}
-                        </p>
-                        <p className={`text-xs mt-1 ${
-                          theme === 'light' 
-                            ? 'text-gray-500' 
-                            : 'text-gray-400'
-                        }`}>
-                          Click to use this example
-                        </p>
-                      </div>
-                    </div>
-                    
-                    {/* Indicator for selection */}
-                    <div className={`absolute bottom-0 left-0 right-0 h-0.5 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 bg-gradient-to-r ${example.gradient}`}></div>
-                  </button>
-                ))}
-              </div>
-            </div>
           </div>
         </div>
       </main>
