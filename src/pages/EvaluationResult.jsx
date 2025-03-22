@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useTheme } from '../context/ThemeContext';
 import { FileDown } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 // Sample data for the 15 result blocks
 const evaluationResults = [
@@ -132,6 +133,7 @@ const EvaluationResult = () => {
   const isDarkMode = theme === 'dark';
   const [loading, setLoading] = useState(true);
   const [progress, setProgress] = useState(0);
+  const navigate = useNavigate();
 
   // Simulate loading delay
   useEffect(() => {
@@ -160,6 +162,10 @@ const EvaluationResult = () => {
     console.log("Downloading evaluation results...");
     // This would be implemented to actually download results as PDF or JSON
     alert("Download started! (This is just a demo)");
+  };
+
+  const handleVisualize = () => {
+    navigate('/visualization');
   };
 
   const containerVariants = {
@@ -267,7 +273,7 @@ const EvaluationResult = () => {
                           ? 'bg-blue-700 text-white hover:bg-blue-600' 
                           : 'bg-gradient-to-r from-blue-600 via-cyan-600 to-teal-600 text-white hover:opacity-90'
                       } transition-colors shadow-sm`}
-                      onClick={() => console.log('Visualize clicked')}
+                      onClick={handleVisualize}
                     >
                       <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                         <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z" />

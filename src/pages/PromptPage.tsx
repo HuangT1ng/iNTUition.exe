@@ -75,11 +75,6 @@ export function PromptPage({ onNext }: PromptPageProps) {
     // You can implement the file handling logic here
   };
 
-  // If showDesign is true, render the BackendFrontendOverview component
-  if (showDesign) {
-    return <BackendFrontendOverview />;
-  }
-
   return (
     <div className={`min-h-screen flex flex-col ${
       theme === 'light' 
