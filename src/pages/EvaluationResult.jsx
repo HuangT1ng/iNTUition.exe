@@ -374,14 +374,6 @@ const EvaluationResult = () => {
           }`}>
             <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-blue-500 via-cyan-500 to-teal-500"></div>
             
-            <div className={`absolute -right-6 -top-6 w-20 h-20 rotate-12 ${
-              isDarkMode ? 'text-blue-400/20' : 'text-blue-300/40'
-            }`}>
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M11.395 1.219c.218-.53.56-.53.779 0l3.21 7.82a.401.401 0 00.337.245l8.07.566c.585.04.814.76.382 1.125l-6.17 5.24a.401.401 0 00-.129.398l1.88 7.89c.146.612-.517 1.09-1.042.775l-6.94-4.02a.401.401 0 00-.421 0l-6.94 4.02c-.525.315-1.188-.163-1.042-.775l1.88-7.89a.401.401 0 00-.129-.398l-6.17-5.24c-.432-.366-.203-1.084.382-1.125l8.07-.566a.401.401 0 00.336-.245l3.21-7.82z" />
-              </svg>
-            </div>
-            
             <div className="p-4 flex items-center">
               <div className={`flex-shrink-0 w-12 h-12 rounded-full flex items-center justify-center ${
                 isDarkMode ? 'bg-blue-600' : 'bg-blue-600'
