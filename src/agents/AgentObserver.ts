@@ -1,7 +1,6 @@
 /**
  * AgentObserver.ts
  * Monitors and observes agent behavior.
- * This is a placeholder implementation and does not contain actual functionality.
  */
 
 import { AgentEvent, ObserverConfig, AgentMetrics } from './AgentTypes';

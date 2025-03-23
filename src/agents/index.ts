@@ -1,7 +1,6 @@
 /**
  * Agent System - Index file
  * Exports all agent-related components.
- * These are all placeholder implementations and do not contain actual functionality.
  */
 
 // Export all agent-related components

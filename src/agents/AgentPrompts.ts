@@ -1,7 +1,6 @@
 /**
  * AgentPrompts.ts
  * Template prompts for agent operations.
- * This is a placeholder implementation and does not contain actual functionality.
  */
 
 export const AgentPrompts = {

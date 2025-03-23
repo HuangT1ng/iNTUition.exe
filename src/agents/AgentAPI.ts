@@ -1,7 +1,6 @@
 /**
  * AgentAPI.ts
  * API connections for external services.
- * This is a placeholder implementation and does not contain actual functionality.
  */
 
 import { ApiConfig, ApiResponse, ApiRequest } from './AgentTypes';

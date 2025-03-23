@@ -1,7 +1,6 @@
 /**
  * AgentTypes.ts
  * Type definitions for the agent system.
- * This is a placeholder implementation and does not contain actual functionality.
  */
 
 // Agent configuration

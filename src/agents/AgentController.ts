@@ -1,7 +1,6 @@
 /**
  * AgentController.ts
  * Main controller for managing agent lifecycle and operations.
- * This is a placeholder implementation and does not contain actual functionality.
  */
 
 import { AgentMemory } from './AgentMemory';

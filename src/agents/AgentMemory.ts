@@ -1,7 +1,6 @@
 /**
  * AgentMemory.ts
  * Manages memory and context for the agent.
- * This is a placeholder implementation and does not contain actual functionality.
  */
 
 import { MemoryItem, MemoryType } from './AgentTypes';

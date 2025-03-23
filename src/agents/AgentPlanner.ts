@@ -1,7 +1,6 @@
 /**
  * AgentPlanner.ts
  * Responsible for planning and reasoning capabilities.
- * This is a placeholder implementation and does not contain actual functionality.
  */
 
 import { AgentLLM } from './AgentLLM';

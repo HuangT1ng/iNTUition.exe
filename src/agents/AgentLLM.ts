@@ -1,7 +1,6 @@
 /**
  * AgentLLM.ts
  * Interface for language model interactions.
- * This is a placeholder implementation and does not contain actual functionality.
  */
 
 import { LLMConfig, LLMResponse, LLMStreamCallbacks } from './AgentTypes';

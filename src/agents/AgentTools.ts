@@ -1,7 +1,6 @@
 /**
  * AgentTools.ts
  * Collection of tools available to the agent.
- * This is a placeholder implementation and does not contain actual functionality.
  */
 
 import { Tool, ToolResult, ToolInput } from './AgentTypes';

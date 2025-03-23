@@ -1,7 +1,6 @@
 /**
  * AgentUtils.ts
  * Utility functions for the agent system.
- * This is a placeholder implementation and does not contain actual functionality.
  */
 
 export class AgentUtils {
