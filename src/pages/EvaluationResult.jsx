@@ -393,7 +393,7 @@ const EvaluationResult = () => {
                       <span className={`ml-2 px-2 py-0.5 text-xs rounded-full bg-blue-600/10 ${
                         isDarkMode ? 'text-blue-300' : 'text-blue-700'
                       }`}>
-                        B{sortedResults[0].backend} + F{sortedResults[0].frontend}
+                        Backend {sortedResults[0].backend} + Frontend {sortedResults[0].frontend}
                       </span>
                     </div>
                     <div className="flex items-center gap-4 mt-1">
@@ -473,7 +473,7 @@ const EvaluationResult = () => {
                     <div>
                       <h2 className={`text-base font-semibold ${
                         isDarkMode ? 'text-white' : 'text-gray-800'
-                      }`}>B{result.backend} + F{result.frontend}</h2>
+                      }`}>Backend {result.backend} + Frontend {result.frontend}</h2>
                     </div>
                   </div>
                   
