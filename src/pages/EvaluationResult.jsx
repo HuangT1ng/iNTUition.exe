@@ -356,23 +356,25 @@ const EvaluationResult = () => {
           <div className={`px-3 py-1.5 rounded-lg text-sm ${
             isDarkMode ? 'bg-gray-800 text-gray-300' : 'bg-gray-100 text-gray-600'
           }`}>
-            {evaluationResults.length} tests
+            {evaluationResults.length} combinations
           </div>
         </div>
 
-        {/* First place winner highlighted */}
+        {/* Best combination highlighted */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7 }}
           className="mb-8"
         >
-          <div className={`relative rounded-lg overflow-hidden ${
-            isDarkMode ? 'bg-blue-900/20 border border-blue-800' : 'bg-blue-50 border border-blue-200'
+          <div className={`relative rounded-lg overflow-hidden border-2 ${
+            isDarkMode 
+              ? 'bg-blue-900/20 border-blue-600' 
+              : 'bg-blue-50 border-blue-400'
           }`}>
-            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 via-cyan-500 to-teal-500"></div>
+            <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-blue-500 via-cyan-500 to-teal-500"></div>
             
-            <div className={`absolute -right-6 -top-6 w-24 h-24 ${
+            <div className={`absolute -right-6 -top-6 w-20 h-20 rotate-12 ${
               isDarkMode ? 'text-blue-400/20' : 'text-blue-300/40'
             }`}>
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
@@ -380,24 +382,44 @@ const EvaluationResult = () => {
               </svg>
             </div>
             
-            <div className="p-4 flex items-center gap-4">
-              <div className={`flex-shrink-0 w-16 h-16 rounded-full flex items-center justify-center ${
+            <div className="p-4 flex items-center">
+              <div className={`flex-shrink-0 w-12 h-12 rounded-full flex items-center justify-center ${
                 isDarkMode ? 'bg-blue-600' : 'bg-blue-600'
               }`}>
-                <span className="text-white text-xl font-bold">#1</span>
+                <span className="text-white text-sm font-bold">BEST</span>
               </div>
               
-              <div className="flex-grow">
-                <div className="flex justify-between items-start">
+              <div className="flex-grow ml-4">
+                <div className="flex justify-between items-center">
                   <div>
-                    <h3 className={`text-lg md:text-xl font-bold ${
-                      isDarkMode ? 'text-white' : 'text-blue-800'
-                    }`}>
-                      First Place Winner
-                    </h3>
-                    <p className={isDarkMode ? 'text-blue-300' : 'text-blue-700'}>
-                      Backend {sortedResults[0].backend}, Frontend {sortedResults[0].frontend}
-                    </p>
+                    <div className="flex items-center">
+                      <h3 className={`text-lg font-bold ${
+                        isDarkMode ? 'text-white' : 'text-blue-800'
+                      }`}>
+                        Best Combination
+                      </h3>
+                      <span className={`ml-2 px-2 py-0.5 text-xs rounded-full bg-blue-600/10 ${
+                        isDarkMode ? 'text-blue-300' : 'text-blue-700'
+                      }`}>
+                        B{sortedResults[0].backend} + F{sortedResults[0].frontend}
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-4 mt-1">
+                      <div className="flex items-center">
+                        <span className="text-xs text-gray-500 dark:text-gray-400 mr-1">Backend:</span>
+                        <span className="text-sm font-bold text-emerald-500">{sortedResults[0].backendScore.toFixed(1)}</span>
+                      </div>
+                      <div className="flex items-center">
+                        <span className="text-xs text-gray-500 dark:text-gray-400 mr-1">Frontend:</span>
+                        <span className="text-sm font-bold text-emerald-500">{sortedResults[0].frontendScore.toFixed(1)}</span>
+                      </div>
+                      <div className="flex items-center">
+                        <span className="text-xs text-gray-500 dark:text-gray-400 mr-1">Total:</span>
+                        <span className="text-sm font-bold text-emerald-500">
+                          {((sortedResults[0].backendScore + sortedResults[0].frontendScore) / 2).toFixed(1)}
+                        </span>
+                      </div>
+                    </div>
                   </div>
                   
                   <motion.button 
@@ -415,58 +437,10 @@ const EvaluationResult = () => {
                   </motion.button>
                 </div>
                 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
-                  <div>
-                    <div className="flex justify-between items-center mb-2">
-                      <span className={`text-sm font-medium ${
-                        isDarkMode ? 'text-gray-300' : 'text-gray-600'
-                      }`}>Backend Score</span>
-                      <div className="flex items-center">
-                        <span className={`text-lg font-bold text-emerald-500`}>
-                          {sortedResults[0].backendScore.toFixed(1)}
-                        </span>
-                        <span className="text-xs ml-1 text-gray-400">/100</span>
-                      </div>
-                    </div>
-                    <div className="w-full h-2.5 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
-                      <motion.div 
-                        initial={{ width: 0 }}
-                        animate={{ width: `${sortedResults[0].backendScore}%` }}
-                        transition={{ duration: 1 }}
-                        className="h-full rounded-full bg-emerald-500"
-                      ></motion.div>
-                    </div>
-                  </div>
-                  
-                  <div>
-                    <div className="flex justify-between items-center mb-2">
-                      <span className={`text-sm font-medium ${
-                        isDarkMode ? 'text-gray-300' : 'text-gray-600'
-                      }`}>Frontend Score</span>
-                      <div className="flex items-center">
-                        <span className={`text-lg font-bold text-emerald-500`}>
-                          {sortedResults[0].frontendScore.toFixed(1)}
-                        </span>
-                        <span className="text-xs ml-1 text-gray-400">/100</span>
-                      </div>
-                    </div>
-                    <div className="w-full h-2.5 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
-                      <motion.div 
-                        initial={{ width: 0 }}
-                        animate={{ width: `${sortedResults[0].frontendScore}%` }}
-                        transition={{ duration: 1, delay: 0.2 }}
-                        className="h-full rounded-full bg-emerald-500"
-                      ></motion.div>
-                    </div>
-                  </div>
-                </div>
-                
-                <div className={`p-4 mt-4 rounded-lg ${
-                  isDarkMode ? 'bg-gray-800/70' : 'bg-white'
-                }`}>
+                <div className="mt-3">
                   <p className={`${
                     isDarkMode ? 'text-gray-300' : 'text-gray-600'
-                  } text-sm leading-relaxed`}>
+                  } text-sm`}>
                     {sortedResults[0].analysis}
                   </p>
                 </div>
@@ -477,10 +451,10 @@ const EvaluationResult = () => {
 
         <h2 className={`text-xl font-bold mb-6 ${
           isDarkMode ? 'text-white' : 'text-gray-800'
-        }`}>Other Results</h2>
+        }`}>Other Combinations</h2>
 
         <motion.div 
-          className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-6xl mx-auto"
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
           variants={containerVariants}
           initial="hidden"
           animate="visible"
@@ -489,17 +463,17 @@ const EvaluationResult = () => {
             <motion.div 
               key={result.id}
               variants={itemVariants}
-              whileHover={{ y: -5 }}
+              whileHover={{ y: -3 }}
               className={`rounded-lg shadow-sm overflow-hidden border ${
                 isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'
               } hover:shadow-md transition-all`}
             >
-              <div className={`p-4 border-b ${
+              <div className={`p-3 border-b ${
                 isDarkMode ? 'border-gray-700 bg-gray-800' : 'border-gray-200 bg-white'
               }`}>
                 <div className="flex justify-between items-center">
                   <div className="flex items-center gap-2">
-                    <span className={`inline-flex items-center justify-center w-8 h-8 rounded-full ${
+                    <span className={`inline-flex items-center justify-center w-7 h-7 rounded-full ${
                       isDarkMode ? 'bg-gray-700 text-gray-300' : 'bg-gray-100 text-gray-600'
                     }`}>
                       #{index + 2}
@@ -507,44 +481,38 @@ const EvaluationResult = () => {
                     <div>
                       <h2 className={`text-base font-semibold ${
                         isDarkMode ? 'text-white' : 'text-gray-800'
-                      }`}>Backend {result.backend}, Frontend {result.frontend}</h2>
-                      <span className={`text-xs px-2 py-0.5 rounded-full ${
-                        (result.backendScore + result.frontendScore) / 2 >= 95
-                          ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-400'
-                          : (result.backendScore + result.frontendScore) / 2 >= 90
-                            ? 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400'
-                            : 'bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-400'
-                      }`}>
-                        {(result.backendScore + result.frontendScore) / 2 >= 95
-                          ? 'Excellent'
-                          : (result.backendScore + result.frontendScore) / 2 >= 90
-                            ? 'Good'
-                            : 'Average'}
-                      </span>
+                      }`}>B{result.backend} + F{result.frontend}</h2>
                     </div>
                   </div>
+                  
+                  <span className={`text-xs px-2 py-0.5 rounded-full ${
+                    (result.backendScore + result.frontendScore) / 2 >= 95
+                      ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-400'
+                      : (result.backendScore + result.frontendScore) / 2 >= 90
+                        ? 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400'
+                        : 'bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-400'
+                  }`}>
+                    {((result.backendScore + result.frontendScore) / 2).toFixed(1)}
+                  </span>
                 </div>
               </div>
               
-              <div className="p-6">
-                <div className="mb-6 space-y-4">
+              <div className="p-4">
+                <div className="mb-4 space-y-3">
                   <div>
-                    <div className="flex justify-between items-center mb-2">
-                      <span className={`text-sm font-medium ${
-                        isDarkMode ? 'text-gray-300' : 'text-gray-600'
+                    <div className="flex justify-between items-center mb-1">
+                      <span className={`text-xs font-medium ${
+                        isDarkMode ? 'text-gray-400' : 'text-gray-500'
                       }`}>Backend Score</span>
-                      <div className="flex items-center">
-                        <span className={`text-lg font-bold ${
-                          result.backendScore >= 95 
-                            ? 'text-emerald-500' 
-                            : result.backendScore >= 85 
-                              ? 'text-amber-500' 
-                              : 'text-red-500'
-                        }`}>{result.backendScore.toFixed(1)}</span>
-                        <span className="text-xs ml-1 text-gray-400">/100</span>
-                      </div>
+                      <span className={`text-sm font-bold ${
+                        result.backendScore >= 95 
+                          ? 'text-emerald-500' 
+                          : result.backendScore >= 85 
+                            ? 'text-amber-500' 
+                            : 'text-red-500'
+                      }`}>{result.backendScore.toFixed(1)}</span>
                     </div>
-                    <div className="w-full h-2.5 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                    <div className="w-full h-1.5 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
                       <motion.div 
                         initial={{ width: 0 }}
                         animate={{ width: `${result.backendScore}%` }}
@@ -561,22 +529,19 @@ const EvaluationResult = () => {
                   </div>
                   
                   <div>
-                    <div className="flex justify-between items-center mb-2">
-                      <span className={`text-sm font-medium ${
-                        isDarkMode ? 'text-gray-300' : 'text-gray-600'
+                    <div className="flex justify-between items-center mb-1">
+                      <span className={`text-xs font-medium ${
+                        isDarkMode ? 'text-gray-400' : 'text-gray-500'
                       }`}>Frontend Score</span>
-                      <div className="flex items-center">
-                        <span className={`text-lg font-bold ${
-                          result.frontendScore >= 95 
-                            ? 'text-emerald-500' 
-                            : result.frontendScore >= 85 
-                              ? 'text-amber-500' 
-                              : 'text-red-500'
-                        }`}>{result.frontendScore.toFixed(1)}</span>
-                        <span className="text-xs ml-1 text-gray-400">/100</span>
-                      </div>
+                      <span className={`text-sm font-bold ${
+                        result.frontendScore >= 95 
+                          ? 'text-emerald-500' 
+                          : result.frontendScore >= 85 
+                            ? 'text-amber-500' 
+                            : 'text-red-500'
+                      }`}>{result.frontendScore.toFixed(1)}</span>
                     </div>
-                    <div className="w-full h-2.5 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                    <div className="w-full h-1.5 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
                       <motion.div 
                         initial={{ width: 0 }}
                         animate={{ width: `${result.frontendScore}%` }}
@@ -593,42 +558,22 @@ const EvaluationResult = () => {
                   </div>
                 </div>
 
-                <div className={`p-4 rounded-lg ${
-                  isDarkMode ? 'bg-gray-700/30' : 'bg-gray-50'
-                } hover:shadow-sm transition-shadow`}>
-                  <div className="flex items-center justify-between mb-2">
-                    <h3 className={`text-sm font-semibold flex items-center ${
-                      isDarkMode ? 'text-gray-200' : 'text-gray-700'
-                    }`}>
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1.5 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                        <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
-                        <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
-                      </svg>
-                      Analysis
-                    </h3>
-                    <div className={`px-2 py-0.5 rounded-md text-xs font-medium ${
-                      isDarkMode 
-                        ? 'bg-gray-800 text-gray-400' 
-                        : 'bg-gray-200 text-gray-600'
-                    }`}>Rank #{index + 2}</div>
-                  </div>
-                  <p className={`${
-                    isDarkMode ? 'text-gray-400' : 'text-gray-600'
-                  } text-xs leading-relaxed`}>
-                    {result.analysis}
-                  </p>
-                  
-                  <div className="mt-3 flex justify-end">
-                    <motion.button
-                      whileHover={{ x: 3 }}
-                      className={`text-xs font-medium flex items-center gap-1 ${
-                        isDarkMode ? 'text-blue-400 hover:text-blue-300' : 'text-blue-600 hover:text-blue-700'
-                      }`}
-                    >
-                      View details
-                      <ArrowRight size={12} />
-                    </motion.button>
-                  </div>
+                <p className={`text-xs leading-relaxed ${
+                  isDarkMode ? 'text-gray-400' : 'text-gray-600'
+                } line-clamp-3`}>
+                  {result.analysis}
+                </p>
+                
+                <div className="mt-3 flex justify-end">
+                  <motion.button
+                    whileHover={{ x: 3 }}
+                    className={`text-xs font-medium flex items-center gap-1 ${
+                      isDarkMode ? 'text-blue-400 hover:text-blue-300' : 'text-blue-600 hover:text-blue-700'
+                    }`}
+                  >
+                    View details
+                    <ArrowRight size={12} />
+                  </motion.button>
                 </div>
               </div>
             </motion.div>
