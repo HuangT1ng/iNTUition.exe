@@ -4,7 +4,6 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { PromptPage } from './pages/PromptPage';
 // @ts-ignore
 import BackendFrontendOverview from './pages/BackendFrontendOverview';
-// @ts-ignore
 import { VisualizationPage } from './pages/VisualizationPage';
 import EvaluationResult from './pages/EvaluationResult';
 import { HomePage } from './pages/HomePage';
