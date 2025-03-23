@@ -87,7 +87,7 @@ export function PromptPage({ onNext }: PromptPageProps) {
       
       <main className="flex-1 flex flex-col">
         <div className="flex-1 flex flex-col items-center justify-center px-4 py-10 sm:px-6 lg:px-8">
-          <div className="w-full max-w-2xl space-y-10 text-center">
+          <div className="w-full max-w-[65%] space-y-10 text-center">
             <div className={`space-y-5 ${
               theme === 'light' ? 'text-blue-700' : 'text-white'
             }`}>
@@ -95,17 +95,17 @@ export function PromptPage({ onNext }: PromptPageProps) {
                 <Sparkles className="w-11 h-11" />
                 <h1 className={`text-4xl font-bold tracking-tight ${
                   theme === 'light' ? 'bg-gradient-to-r from-blue-600 via-cyan-600 to-teal-600 bg-clip-text text-transparent' : ''
-                }`}>Unified Planner-to-Designer</h1>
+                }`}>exe.ai</h1>
               </div>
               <p className={`text-lg max-w-2xl mx-auto ${
                 theme === 'light' ? 'text-gray-700' : 'text-gray-300'
               }`}>
-                Transform your idea into a complete technical product using AI
+                Transform your idea into a complete technical product using our AI
               </p>
             </div>
 
             <form onSubmit={handleSubmit} className="relative w-full">
-              <div className={`relative rounded-xl shadow-md ${
+              <div className={`relative rounded-3xl shadow-md ${
                 theme === 'light'
                   ? 'bg-white/90 border border-blue-100'
                   : 'bg-[#40414F] border border-gray-700'
@@ -114,7 +114,7 @@ export function PromptPage({ onNext }: PromptPageProps) {
                   value={idea}
                   onChange={handleTyping}
                   placeholder="Describe your product idea in detail..."
-                  className={`w-full h-44 p-5 rounded-xl resize-none focus:outline-none focus:ring-0 text-base ${
+                  className={`w-full h-[8rem] p-5 rounded-3xl resize-none focus:outline-none focus:ring-0 text-base ${
                     theme === 'light'
                       ? 'bg-white/90 text-gray-900 placeholder-gray-400'
                       : 'bg-[#40414F] text-white placeholder-gray-400'

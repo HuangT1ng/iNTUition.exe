@@ -168,7 +168,7 @@ const BackendFrontendOverview = () => {
   return (
     <div className={`relative w-full min-h-screen px-4 py-8 ${theme === 'light' ? 'bg-gradient-to-br from-blue-50 via-cyan-50 to-slate-50' : 'bg-[#343541]'}`}>
       <h2 className={`text-3xl font-bold text-center mb-12 ${theme === 'light' ? 'bg-gradient-to-r from-blue-600 via-cyan-600 to-teal-600 bg-clip-text text-transparent' : 'text-white'}`}>
-        Backend to Frontend System Design Overview
+      Architecture Exploration & Visualization
       </h2>
 
       <div className="relative flex flex-col items-center" ref={containerRef}>
