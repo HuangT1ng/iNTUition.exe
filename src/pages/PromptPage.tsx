@@ -5,6 +5,7 @@ import { ThemeToggle } from '../components/ThemeToggle';
 import { Footer } from '../components/Footer';
 import { useTheme } from '../context/ThemeContext';
 import { useNavigate } from 'react-router-dom';
+import Logo from '../components/Logo';
 // @ts-ignore
 import BackendFrontendOverview from './BackendFrontendOverview';
 
@@ -91,11 +92,8 @@ export function PromptPage({ onNext }: PromptPageProps) {
             <div className={`space-y-5 ${
               theme === 'light' ? 'text-blue-700' : 'text-white'
             }`}>
-              <div className="flex items-center justify-center space-x-3">
-                <Sparkles className="w-11 h-11" />
-                <h1 className={`text-4xl font-bold tracking-tight ${
-                  theme === 'light' ? 'bg-gradient-to-r from-blue-600 via-cyan-600 to-teal-600 bg-clip-text text-transparent' : ''
-                }`}>exe.ai</h1>
+              <div className="flex justify-center">
+                <Logo size="lg" className="scale-125 origin-center transform-gpu" />
               </div>
               <p className={`text-lg max-w-2xl mx-auto ${
                 theme === 'light' ? 'text-gray-700' : 'text-gray-300'

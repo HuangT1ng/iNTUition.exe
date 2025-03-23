@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useTheme } from '../context/ThemeContext';
-import { FileDown } from 'lucide-react';
+import { FileDown, ChevronLeft, ArrowRight, BarChart2, Terminal } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 // Sample data for the 15 result blocks
@@ -135,6 +135,11 @@ const EvaluationResult = () => {
   const [progress, setProgress] = useState(0);
   const navigate = useNavigate();
 
+  // Sort the evaluation results by total score (backend + frontend)
+  const sortedResults = [...evaluationResults].sort(
+    (a, b) => (b.backendScore + b.frontendScore) - (a.backendScore + a.frontendScore)
+  );
+
   // Simulate loading delay
   useEffect(() => {
     const progressInterval = setInterval(() => {
@@ -193,168 +198,437 @@ const EvaluationResult = () => {
   if (loading) {
     return (
       <div className={`flex flex-col items-center justify-center min-h-screen w-full ${
-        isDarkMode ? 'bg-gray-900 text-white' : 'bg-gradient-to-br from-blue-50 via-cyan-50 to-slate-50'
+        isDarkMode ? 'bg-gray-900 text-white' : 'bg-white'
       }`}>
         <div className="flex flex-col items-center max-w-md mx-auto p-8 rounded-xl shadow-lg">
-          <div className="flex space-x-2 mb-4">
-            <div className="w-3 h-3 rounded-full bg-cyan-500 animate-pulse" style={{ animationDelay: '0s' }}></div>
-            <div className="w-3 h-3 rounded-full bg-cyan-500 animate-pulse" style={{ animationDelay: '0.2s' }}></div>
-            <div className="w-3 h-3 rounded-full bg-cyan-500 animate-pulse" style={{ animationDelay: '0.4s' }}></div>
+          <div className="relative w-16 h-16 mb-4">
+            <div className="absolute inset-0 rounded-full border-4 border-blue-200 dark:border-blue-900"></div>
+            <div className="absolute inset-0 rounded-full border-4 border-blue-500 border-t-transparent animate-spin"></div>
+            <div className="absolute inset-0 flex items-center justify-center">
+              <span className="text-sm font-semibold text-blue-600 dark:text-blue-400">{progress}%</span>
+            </div>
           </div>
-          <h2 className="text-xl font-semibold mb-6">Loading evaluation results...</h2>
+          <h2 className="text-xl font-semibold mb-4">Loading evaluation results...</h2>
+          <p className="text-sm text-gray-500 dark:text-gray-400 mb-6">Analyzing system performance</p>
           
           {/* Progress bar */}
           <div className="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden mb-2">
             <div 
-              className="h-full bg-gradient-to-r from-blue-500 via-cyan-500 to-teal-500 rounded-full transition-all duration-300 ease-out"
+              className="h-full bg-blue-500 rounded-full transition-all duration-300 ease-out"
               style={{ width: `${progress}%` }}
             ></div>
           </div>
-          <p className="text-sm text-gray-500 dark:text-gray-400">{progress}% Complete</p>
         </div>
       </div>
     );
   }
 
+  // Calculate average scores
+  const avgBackendScore = evaluationResults.reduce((sum, result) => sum + result.backendScore, 0) / evaluationResults.length;
+  const avgFrontendScore = evaluationResults.reduce((sum, result) => sum + result.frontendScore, 0) / evaluationResults.length;
+  const overallScore = (avgBackendScore + avgFrontendScore) / 2;
+
   return (
-    <div className={`min-h-screen pb-16 ${
-      isDarkMode ? 'bg-gray-900 text-white' : 'bg-gradient-to-br from-blue-50 via-cyan-50 to-slate-50'
+    <div className={`min-h-screen ${
+      isDarkMode ? 'bg-gray-900 text-white' : 'bg-white'
     }`}>
       {/* Sticky header */}
-      <header className={`sticky top-0 z-10 shadow-md py-4 ${
-        isDarkMode ? 'bg-blue-900' : 'bg-blue-100'
+      <header className={`sticky top-0 z-10 shadow-sm py-4 ${
+        isDarkMode ? 'bg-gray-800 border-b border-gray-700' : 'bg-white border-b border-gray-200'
       }`}>
         <div className="container mx-auto px-4 flex justify-between items-center">
-          <h1 className={`text-2xl font-bold ${
-            isDarkMode ? 'text-white' : 'bg-gradient-to-r from-blue-600 via-cyan-600 to-teal-600 bg-clip-text text-transparent'
-          }`}>Evaluation Results</h1>
+          <div className="flex items-center gap-3">
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className={`p-1.5 rounded-full ${
+                isDarkMode ? 'hover:bg-gray-700' : 'hover:bg-gray-100'
+              } transition-colors`}
+              onClick={() => navigate('/')}
+            >
+              <ChevronLeft size={20} className={isDarkMode ? 'text-gray-300' : 'text-gray-600'} />
+            </motion.button>
+            <div>
+              <h1 className={`text-2xl font-bold ${
+                isDarkMode ? 'text-white' : 'text-blue-700'
+              }`}>Evaluation Results</h1>
+              <p className={`text-sm ${
+                isDarkMode ? 'text-gray-400' : 'text-gray-500'
+              }`}>Performance analysis of your system</p>
+            </div>
+          </div>
           
-          <button 
-            onClick={handleDownload}
-            className={`flex items-center gap-2 px-4 py-2 rounded-lg ${
-              isDarkMode 
-                ? 'bg-blue-700 text-white hover:bg-blue-600' 
-                : 'bg-gradient-to-r from-blue-600 via-cyan-600 to-teal-600 text-white hover:opacity-90'
-            } transition-colors`}
-          >
-            <FileDown size={18} />
-            <span>Download</span>
-          </button>
+          <div className="flex gap-3">
+            <motion.button 
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={handleVisualize}
+              className={`flex items-center gap-2 px-4 py-2 rounded-lg ${
+                isDarkMode 
+                  ? 'bg-gray-700 text-white hover:bg-gray-600' 
+                  : 'bg-blue-50 text-blue-600 hover:bg-blue-100'
+              } transition-colors shadow-sm`}
+            >
+              <BarChart2 size={18} />
+              <span>Visualize</span>
+            </motion.button>
+            
+            <motion.button 
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={handleDownload}
+              className={`flex items-center gap-2 px-4 py-2 rounded-lg ${
+                isDarkMode 
+                  ? 'bg-blue-700 text-white hover:bg-blue-600' 
+                  : 'bg-blue-600 text-white hover:bg-blue-700'
+              } transition-colors shadow-sm`}
+            >
+              <FileDown size={18} />
+              <span>Download</span>
+            </motion.button>
+          </div>
         </div>
       </header>
 
       <div className="container mx-auto px-4 py-8">
+        {/* Summary statistics */}
         <motion.div 
-          className="grid grid-cols-1 gap-6 max-w-4xl mx-auto"
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className={`mb-8 p-6 rounded-xl ${
+            isDarkMode ? 'bg-gray-800 border border-gray-700' : 'bg-white border border-gray-200 shadow-sm'
+          }`}
+        >
+          <h2 className={`text-xl font-bold mb-4 ${
+            isDarkMode ? 'text-white' : 'text-gray-800'
+          }`}>Performance Summary</h2>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className={`p-4 rounded-lg ${isDarkMode ? 'bg-gray-700/50' : 'bg-blue-50'}`}>
+              <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">Backend Average</h3>
+              <div className="flex items-center">
+                <span className={`text-3xl font-bold ${
+                  avgBackendScore >= 95 ? 'text-emerald-500' : avgBackendScore >= 85 ? 'text-amber-500' : 'text-red-500'
+                }`}>{avgBackendScore.toFixed(1)}</span>
+                <span className="text-xs ml-1 text-gray-400 self-end mb-1">/100</span>
+              </div>
+            </div>
+            
+            <div className={`p-4 rounded-lg ${isDarkMode ? 'bg-gray-700/50' : 'bg-blue-50'}`}>
+              <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">Frontend Average</h3>
+              <div className="flex items-center">
+                <span className={`text-3xl font-bold ${
+                  avgFrontendScore >= 95 ? 'text-emerald-500' : avgFrontendScore >= 85 ? 'text-amber-500' : 'text-red-500'
+                }`}>{avgFrontendScore.toFixed(1)}</span>
+                <span className="text-xs ml-1 text-gray-400 self-end mb-1">/100</span>
+              </div>
+            </div>
+            
+            <div className={`p-4 rounded-lg ${isDarkMode ? 'bg-gray-700/50' : 'bg-gradient-to-r from-blue-50 to-indigo-50'}`}>
+              <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">Overall Performance</h3>
+              <div className="flex items-center">
+                <span className={`text-3xl font-bold ${
+                  overallScore >= 95 ? 'text-emerald-500' : overallScore >= 85 ? 'text-amber-500' : 'text-red-500'
+                }`}>{overallScore.toFixed(1)}</span>
+                <span className="text-xs ml-1 text-gray-400 self-end mb-1">/100</span>
+              </div>
+              <div className="mt-2">
+                <span className={`text-xs px-2 py-1 rounded-full ${
+                  overallScore >= 95 
+                    ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-400' 
+                    : overallScore >= 85 
+                      ? 'bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-400' 
+                      : 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400'
+                }`}>
+                  {overallScore >= 95 ? 'Excellent' : overallScore >= 85 ? 'Good' : 'Needs Improvement'}
+                </span>
+              </div>
+            </div>
+          </div>
+        </motion.div>
+        
+        <div className="flex justify-between items-center mb-6">
+          <h2 className={`text-xl font-bold ${
+            isDarkMode ? 'text-white' : 'text-gray-800'
+          }`}>Detailed Results</h2>
+          
+          <div className={`px-3 py-1.5 rounded-lg text-sm ${
+            isDarkMode ? 'bg-gray-800 text-gray-300' : 'bg-gray-100 text-gray-600'
+          }`}>
+            {evaluationResults.length} tests
+          </div>
+        </div>
+
+        {/* First place winner highlighted */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7 }}
+          className="mb-8"
+        >
+          <div className={`relative rounded-lg overflow-hidden ${
+            isDarkMode ? 'bg-blue-900/20 border border-blue-800' : 'bg-blue-50 border border-blue-200'
+          }`}>
+            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 via-cyan-500 to-teal-500"></div>
+            
+            <div className={`absolute -right-6 -top-6 w-24 h-24 ${
+              isDarkMode ? 'text-blue-400/20' : 'text-blue-300/40'
+            }`}>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M11.395 1.219c.218-.53.56-.53.779 0l3.21 7.82a.401.401 0 00.337.245l8.07.566c.585.04.814.76.382 1.125l-6.17 5.24a.401.401 0 00-.129.398l1.88 7.89c.146.612-.517 1.09-1.042.775l-6.94-4.02a.401.401 0 00-.421 0l-6.94 4.02c-.525.315-1.188-.163-1.042-.775l1.88-7.89a.401.401 0 00-.129-.398l-6.17-5.24c-.432-.366-.203-1.084.382-1.125l8.07-.566a.401.401 0 00.336-.245l3.21-7.82z" />
+              </svg>
+            </div>
+            
+            <div className="p-4 flex items-center gap-4">
+              <div className={`flex-shrink-0 w-16 h-16 rounded-full flex items-center justify-center ${
+                isDarkMode ? 'bg-blue-600' : 'bg-blue-600'
+              }`}>
+                <span className="text-white text-xl font-bold">#1</span>
+              </div>
+              
+              <div className="flex-grow">
+                <div className="flex justify-between items-start">
+                  <div>
+                    <h3 className={`text-lg md:text-xl font-bold ${
+                      isDarkMode ? 'text-white' : 'text-blue-800'
+                    }`}>
+                      First Place Winner
+                    </h3>
+                    <p className={isDarkMode ? 'text-blue-300' : 'text-blue-700'}>
+                      Backend {sortedResults[0].backend}, Frontend {sortedResults[0].frontend}
+                    </p>
+                  </div>
+                  
+                  <motion.button 
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    className={`px-3 py-1.5 rounded-lg text-sm font-medium flex items-center gap-1.5 ${
+                      isDarkMode 
+                        ? 'bg-blue-700 text-white hover:bg-blue-600' 
+                        : 'bg-blue-600 text-white hover:bg-blue-700'
+                    } transition-colors shadow-sm`}
+                    onClick={handleVisualize}
+                  >
+                    <BarChart2 className="h-4 w-4" />
+                    <span>Visualize</span>
+                  </motion.button>
+                </div>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
+                  <div>
+                    <div className="flex justify-between items-center mb-2">
+                      <span className={`text-sm font-medium ${
+                        isDarkMode ? 'text-gray-300' : 'text-gray-600'
+                      }`}>Backend Score</span>
+                      <div className="flex items-center">
+                        <span className={`text-lg font-bold text-emerald-500`}>
+                          {sortedResults[0].backendScore.toFixed(1)}
+                        </span>
+                        <span className="text-xs ml-1 text-gray-400">/100</span>
+                      </div>
+                    </div>
+                    <div className="w-full h-2.5 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                      <motion.div 
+                        initial={{ width: 0 }}
+                        animate={{ width: `${sortedResults[0].backendScore}%` }}
+                        transition={{ duration: 1 }}
+                        className="h-full rounded-full bg-emerald-500"
+                      ></motion.div>
+                    </div>
+                  </div>
+                  
+                  <div>
+                    <div className="flex justify-between items-center mb-2">
+                      <span className={`text-sm font-medium ${
+                        isDarkMode ? 'text-gray-300' : 'text-gray-600'
+                      }`}>Frontend Score</span>
+                      <div className="flex items-center">
+                        <span className={`text-lg font-bold text-emerald-500`}>
+                          {sortedResults[0].frontendScore.toFixed(1)}
+                        </span>
+                        <span className="text-xs ml-1 text-gray-400">/100</span>
+                      </div>
+                    </div>
+                    <div className="w-full h-2.5 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                      <motion.div 
+                        initial={{ width: 0 }}
+                        animate={{ width: `${sortedResults[0].frontendScore}%` }}
+                        transition={{ duration: 1, delay: 0.2 }}
+                        className="h-full rounded-full bg-emerald-500"
+                      ></motion.div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className={`p-4 mt-4 rounded-lg ${
+                  isDarkMode ? 'bg-gray-800/70' : 'bg-white'
+                }`}>
+                  <p className={`${
+                    isDarkMode ? 'text-gray-300' : 'text-gray-600'
+                  } text-sm leading-relaxed`}>
+                    {sortedResults[0].analysis}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </motion.div>
+
+        <h2 className={`text-xl font-bold mb-6 ${
+          isDarkMode ? 'text-white' : 'text-gray-800'
+        }`}>Other Results</h2>
+
+        <motion.div 
+          className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-6xl mx-auto"
           variants={containerVariants}
           initial="hidden"
           animate="visible"
         >
-          {evaluationResults.map(result => (
+          {sortedResults.slice(1).map((result, index) => (
             <motion.div 
               key={result.id}
               variants={itemVariants}
-              className={`rounded-lg shadow-md overflow-hidden ${
-                isDarkMode ? 'bg-gray-800' : 'bg-white'
-              }`}
+              whileHover={{ y: -5 }}
+              className={`rounded-lg shadow-sm overflow-hidden border ${
+                isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'
+              } hover:shadow-md transition-all`}
             >
-              <div className={`p-4 ${
-                isDarkMode ? 'bg-blue-900' : 'bg-blue-100'
+              <div className={`p-4 border-b ${
+                isDarkMode ? 'border-gray-700 bg-gray-800' : 'border-gray-200 bg-white'
               }`}>
                 <div className="flex justify-between items-center">
-                  <h2 className={`text-lg font-semibold ${
-                    isDarkMode ? 'text-white' : 'text-blue-800'
-                  }`}>Backend {result.backend}, Frontend {result.frontend}</h2>
-                  
-                  {result.id === 1 && (
-                    <button 
-                      className={`px-3 py-1.5 rounded-lg text-sm font-medium flex items-center space-x-1 ${
-                        isDarkMode 
-                          ? 'bg-blue-700 text-white hover:bg-blue-600' 
-                          : 'bg-gradient-to-r from-blue-600 via-cyan-600 to-teal-600 text-white hover:opacity-90'
-                      } transition-colors shadow-sm`}
-                      onClick={handleVisualize}
-                    >
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                        <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z" />
-                        <circle cx="12" cy="12" r="3" />
-                      </svg>
-                      <span>Visualize</span>
-                    </button>
-                  )}
+                  <div className="flex items-center gap-2">
+                    <span className={`inline-flex items-center justify-center w-8 h-8 rounded-full ${
+                      isDarkMode ? 'bg-gray-700 text-gray-300' : 'bg-gray-100 text-gray-600'
+                    }`}>
+                      #{index + 2}
+                    </span>
+                    <div>
+                      <h2 className={`text-base font-semibold ${
+                        isDarkMode ? 'text-white' : 'text-gray-800'
+                      }`}>Backend {result.backend}, Frontend {result.frontend}</h2>
+                      <span className={`text-xs px-2 py-0.5 rounded-full ${
+                        (result.backendScore + result.frontendScore) / 2 >= 95
+                          ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-400'
+                          : (result.backendScore + result.frontendScore) / 2 >= 90
+                            ? 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400'
+                            : 'bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-400'
+                      }`}>
+                        {(result.backendScore + result.frontendScore) / 2 >= 95
+                          ? 'Excellent'
+                          : (result.backendScore + result.frontendScore) / 2 >= 90
+                            ? 'Good'
+                            : 'Average'}
+                      </span>
+                    </div>
+                  </div>
                 </div>
               </div>
               
               <div className="p-6">
-                <div className="mb-4">
-                  <div className="mb-3">
-                    <div className="flex justify-between items-center mb-1">
-                      <span className="text-gray-600 dark:text-gray-300">Backend Score:</span>
-                      <span className={`font-bold ${
-                        result.backendScore >= 95 
-                          ? 'text-green-500' 
-                          : result.backendScore >= 85 
-                            ? 'text-yellow-500' 
-                            : 'text-red-500'
-                      }`}>{result.backendScore.toFixed(1)}</span>
+                <div className="mb-6 space-y-4">
+                  <div>
+                    <div className="flex justify-between items-center mb-2">
+                      <span className={`text-sm font-medium ${
+                        isDarkMode ? 'text-gray-300' : 'text-gray-600'
+                      }`}>Backend Score</span>
+                      <div className="flex items-center">
+                        <span className={`text-lg font-bold ${
+                          result.backendScore >= 95 
+                            ? 'text-emerald-500' 
+                            : result.backendScore >= 85 
+                              ? 'text-amber-500' 
+                              : 'text-red-500'
+                        }`}>{result.backendScore.toFixed(1)}</span>
+                        <span className="text-xs ml-1 text-gray-400">/100</span>
+                      </div>
                     </div>
-                    <div className="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
-                      <div 
+                    <div className="w-full h-2.5 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                      <motion.div 
+                        initial={{ width: 0 }}
+                        animate={{ width: `${result.backendScore}%` }}
+                        transition={{ duration: 1, delay: 0.2 }}
                         className={`h-full rounded-full ${
                           result.backendScore >= 95 
-                          ? 'bg-gradient-to-r from-green-400 to-green-500' 
+                          ? 'bg-emerald-500' 
                           : result.backendScore >= 85 
-                            ? 'bg-gradient-to-r from-yellow-400 to-yellow-500' 
-                            : 'bg-gradient-to-r from-red-400 to-red-500'
+                            ? 'bg-amber-500' 
+                            : 'bg-red-500'
                         }`}
-                        style={{ width: `${result.backendScore}%` }}
-                      ></div>
+                      ></motion.div>
                     </div>
                   </div>
                   
-                  <div className="mb-4">
-                    <div className="flex justify-between items-center mb-1">
-                      <span className="text-gray-600 dark:text-gray-300">Frontend Score:</span>
-                      <span className={`font-bold ${
-                        result.frontendScore >= 95 
-                          ? 'text-green-500' 
-                          : result.frontendScore >= 85 
-                            ? 'text-yellow-500' 
-                            : 'text-red-500'
-                      }`}>{result.frontendScore.toFixed(1)}</span>
+                  <div>
+                    <div className="flex justify-between items-center mb-2">
+                      <span className={`text-sm font-medium ${
+                        isDarkMode ? 'text-gray-300' : 'text-gray-600'
+                      }`}>Frontend Score</span>
+                      <div className="flex items-center">
+                        <span className={`text-lg font-bold ${
+                          result.frontendScore >= 95 
+                            ? 'text-emerald-500' 
+                            : result.frontendScore >= 85 
+                              ? 'text-amber-500' 
+                              : 'text-red-500'
+                        }`}>{result.frontendScore.toFixed(1)}</span>
+                        <span className="text-xs ml-1 text-gray-400">/100</span>
+                      </div>
                     </div>
-                    <div className="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
-                      <div 
+                    <div className="w-full h-2.5 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                      <motion.div 
+                        initial={{ width: 0 }}
+                        animate={{ width: `${result.frontendScore}%` }}
+                        transition={{ duration: 1, delay: 0.4 }}
                         className={`h-full rounded-full ${
                           result.frontendScore >= 95 
-                          ? 'bg-gradient-to-r from-green-400 to-green-500' 
+                          ? 'bg-emerald-500' 
                           : result.frontendScore >= 85 
-                            ? 'bg-gradient-to-r from-yellow-400 to-yellow-500' 
-                            : 'bg-gradient-to-r from-red-400 to-red-500'
+                            ? 'bg-amber-500' 
+                            : 'bg-red-500'
                         }`}
-                        style={{ width: `${result.frontendScore}%` }}
-                      ></div>
+                      ></motion.div>
                     </div>
                   </div>
                 </div>
 
-                <div className={`p-5 rounded-lg ${
-                  isDarkMode ? 'bg-gray-700/50' : 'bg-gradient-to-r from-blue-50/50 via-cyan-50/50 to-teal-50/50'
-                }`}>
-                  <h3 className={`text-md font-medium mb-3 flex items-center ${
-                    isDarkMode ? 'text-gray-200' : 'text-gray-700'
-                  }`}>
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
-                      <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
-                    </svg>
-                    Analysis
-                  </h3>
+                <div className={`p-4 rounded-lg ${
+                  isDarkMode ? 'bg-gray-700/30' : 'bg-gray-50'
+                } hover:shadow-sm transition-shadow`}>
+                  <div className="flex items-center justify-between mb-2">
+                    <h3 className={`text-sm font-semibold flex items-center ${
+                      isDarkMode ? 'text-gray-200' : 'text-gray-700'
+                    }`}>
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1.5 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+                        <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+                      </svg>
+                      Analysis
+                    </h3>
+                    <div className={`px-2 py-0.5 rounded-md text-xs font-medium ${
+                      isDarkMode 
+                        ? 'bg-gray-800 text-gray-400' 
+                        : 'bg-gray-200 text-gray-600'
+                    }`}>Rank #{index + 2}</div>
+                  </div>
                   <p className={`${
-                    isDarkMode ? 'text-gray-300' : 'text-gray-600'
-                  } text-sm leading-relaxed`}>
+                    isDarkMode ? 'text-gray-400' : 'text-gray-600'
+                  } text-xs leading-relaxed`}>
                     {result.analysis}
                   </p>
+                  
+                  <div className="mt-3 flex justify-end">
+                    <motion.button
+                      whileHover={{ x: 3 }}
+                      className={`text-xs font-medium flex items-center gap-1 ${
+                        isDarkMode ? 'text-blue-400 hover:text-blue-300' : 'text-blue-600 hover:text-blue-700'
+                      }`}
+                    >
+                      View details
+                      <ArrowRight size={12} />
+                    </motion.button>
+                  </div>
                 </div>
               </div>
             </motion.div>

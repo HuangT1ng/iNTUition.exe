@@ -158,7 +158,7 @@ export const SuggestorPage: React.FC = () => {
                   ? 'hover:bg-blue-50 text-blue-600'
                   : 'hover:bg-gray-700 text-gray-300'
               } transition-colors`}
-              onClick={() => navigate('/overview')}
+              onClick={() => navigate('/visualization')}
             >
               <ArrowLeft size={20} />
             </motion.button>

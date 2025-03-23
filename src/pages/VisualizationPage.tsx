@@ -24,7 +24,7 @@ const terminalData = [
     { type: 'calculation', text: 'Measuring cache hit ratio...', delay: 300 },
     { type: 'metric', text: 'Cache Hit Ratio: 92%', delay: 225 },
     { type: 'calculation', text: 'Analyzing concurrent users impact...', delay: 375 },
-    { type: 'metric', text: 'Concurrent Users: 5,000 active sessions', delay: 225 },
+    { type: 'metric', text: 'Concurrent Users: 1000 active sessions', delay: 225 },
     { type: 'log', text: 'Performance analysis complete.', delay: 300 },
     { type: 'calculation', text: 'Calculating final performance score...', delay: 450 },
     { type: 'log', text: 'System health status: EXCELLENT', delay: 300 },
@@ -88,7 +88,7 @@ const VisualizationPage = () => {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             className="p-1.5 rounded-full hover:bg-white/60 transition-colors"
-            onClick={() => navigate('/overview')}
+            onClick={() => navigate('/evaluation-results')}
           >
             <ArrowLeft size={18} className="text-blue-600" />
           </motion.button>
@@ -173,7 +173,7 @@ const VisualizationPage = () => {
                     animate={{ opacity: 1 }}
                     transition={{ delay: 1.1, duration: 0.2 }}
                   >
-                    7
+                    6
                   </motion.span>
                 </motion.div>
                 <motion.div 
