@@ -21,8 +21,20 @@ export function PromptPage({ onNext }: PromptPageProps) {
   const [showDesign, setShowDesign] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(false);
   const typingTimeoutRef = React.useRef<ReturnType<typeof setTimeout>>();
+  const textareaRef = React.useRef<HTMLTextAreaElement>(null);
   const { theme } = useTheme();
   const navigate = useNavigate();
+
+  // Function to adjust textarea height based on content
+  const adjustTextareaHeight = () => {
+    const textarea = textareaRef.current;
+    if (textarea) {
+      // Reset height to auto to get accurate scrollHeight
+      textarea.style.height = 'auto';
+      // Set height to scrollHeight + padding for bottom buttons
+      textarea.style.height = `${Math.max(textarea.scrollHeight, 128)}px`;
+    }
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -42,6 +54,9 @@ export function PromptPage({ onNext }: PromptPageProps) {
     setIdea(e.target.value);
     setIsTyping(true);
 
+    // Adjust textarea height when content changes
+    adjustTextareaHeight();
+
     // Clear existing timeout
     if (typingTimeoutRef.current) {
       clearTimeout(typingTimeoutRef.current);
@@ -53,12 +68,16 @@ export function PromptPage({ onNext }: PromptPageProps) {
     }, 1000);
   };
 
-  // Cleanup timeout on unmount
+  // Initialize textarea height and adjust on window resize
   React.useEffect(() => {
+    adjustTextareaHeight();
+    window.addEventListener('resize', adjustTextareaHeight);
+    
     return () => {
       if (typingTimeoutRef.current) {
         clearTimeout(typingTimeoutRef.current);
       }
+      window.removeEventListener('resize', adjustTextareaHeight);
     };
   }, []);
 
@@ -109,10 +128,11 @@ export function PromptPage({ onNext }: PromptPageProps) {
                   : 'bg-[#40414F] border border-gray-700'
               }`}>
                 <textarea
+                  ref={textareaRef}
                   value={idea}
                   onChange={handleTyping}
                   placeholder="Describe your product idea in detail..."
-                  className={`w-full h-[8rem] p-5 rounded-3xl resize-none focus:outline-none focus:ring-0 text-base ${
+                  className={`w-full min-h-[8rem] p-5 pb-16 rounded-3xl resize-none focus:outline-none focus:ring-0 text-base overflow-hidden ${
                     theme === 'light'
                       ? 'bg-white/90 text-gray-900 placeholder-gray-400'
                       : 'bg-[#40414F] text-white placeholder-gray-400'
