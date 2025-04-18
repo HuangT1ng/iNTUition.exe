@@ -77,3 +77,4 @@ Slides Link:[slide link](https://www.canva.com/design/DAGieJ6prdo/uZ-GwO5j1S6dL4
 - Krish Saraf  
 - Sudipta Guha  
 - Abhiraj Gupta
+- Huang Ting
