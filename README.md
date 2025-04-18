@@ -1,63 +1,79 @@
 # exe.ai: Transforming Ideas into Full-Stack Websites Automatically
 
-Automated Coding to Generate the Best Webpage out of Multiple Combinations  
-+ User Persona Creation for Web Simulation  
-+ Continuous Improvement Suggestions  
-+ Easy Deployment
+Automated coding to generate the best webpage from multiple combinations  
++ User persona creation for web simulation  
++ Continuous improvement suggestions  
++ Easy deployment
 
----
+## Overview
+
+exe.ai is a full-stack AI development engine that takes a single prompt and turns it into a fully deployed, optimized website. It handles code generation, simulation-based evaluation, and continuous optimization, making development accessible to both non-technical and experienced users.
 
 ## Problem Context
 
-- Manual Development Bottlenecks:  
-  Traditional coding and testing cycles can be slow and costly, especially for non-technical users or fast-paced startups.
-- High Complexity:  
-  Building an optimized full-stack website requires juggling numerous frameworks, coding tasks, user testing, and deployment steps.
-- Inefficient Testing & Feedback:  
-  Generating realistic test cases and analyzing user behavior often requires large QA teams and time-consuming manual processes.
+- Manual Development Bottlenecks  
+  Traditional coding and testing cycles are slow and expensive, especially for non-technical users or fast-paced startups.
 
----
+- High Complexity  
+  Building an optimized full-stack website requires juggling frameworks, coding logic, testing procedures, and deployment infrastructure.
 
-## Solution: Automated Full-Stack Generation & Intelligent Simulation
+- Inefficient Testing and Feedback  
+  Generating realistic test cases and analyzing user behavior requires large QA teams and extensive manual effort.
 
-1. Simple Prompt, Many Variants  
-   - The user enters a request (e.g., “I want to create a clothing website.”)  
-   - exe.ai interprets the prompt to generate ~10 backend variants (APIs, DB logic) and ~50 frontend designs—resulting in up to 500 unique site combinations.
+## Our Solution
 
-2. Persona-Based Simulation & Scoring  
-   - Multiple “personas” (varied user profiles) are created to mimic real-world usage.  
-   - These personas interact with each site variant through Puppeteer, measuring 20 metrics (e.g., load times, responsiveness, usability) to score each frontend–backend combination.
+### 1. Simple Prompt, Many Variants  
+- Users provide a prompt (e.g., "I want to build a merch website")  
+- exe.ai generates approximately 10 backend variants and 50 frontend options  
+- Combines these into up to 500 unique full-stack website combinations
 
-3. Ranking & Deployment  
-   - exe.ai identifies the top-scoring frontend–backend pair.  
-   - Frontends are deployed to hosting services (e.g., Netlify); backends run in containerized environments on Kubernetes.
+### 2. Persona-Based Simulation and Scoring  
+- AI-generated personas mimic real user interactions using Puppeteer  
+- Evaluates each site variant across 20 key metrics: performance, usability, speed, etc.  
+- Scores and ranks each combination based on real-world usage simulation
 
-4. Iterative Feedback & Improvement  
-   - A suggestion module examines test logs, surfs the web, and tracks the latest tech trends.  
-   - It proposes changes (e.g., “switch from GPT-3.5 to GPT-4o” or “launch a new collection based on the latest YouTube trend”) that feed back into the pipeline, refining the site further.
+### 3. Ranking and Deployment  
+- Best frontend–backend pair is automatically selected  
+- Frontends are deployed to Netlify or similar services  
+- Backends are hosted in scalable container environments (e.g., Kubernetes)
 
----
+### 4. Iterative Feedback and Improvement  
+- A suggestion module analyzes site performance and online trends  
+- Recommends architecture upgrades and feature additions  
+- Examples: "Switch to GPT-4o", "Add trending YouTube product section"
 
-## Why Our Approach Stands Out
+## Why exe.ai Stands Out
 
-- Speed & Ease:  
-  Non-technical users can launch an optimized site by simply typing a prompt. Technical users also have the option to use our IDE for editing.
-- Comprehensive Testing:  
-  Automated personas and performance metrics rigorously evaluate each site variant—reducing the need for large QA teams.
-- High ROI:  
-  Reduced overhead and faster time-to-market can yield an ROI of 3.5×–8×.
-- Continuous Evolution:  
-  Dynamic, real-time optimization ensures your site continually adapts to fresh trends and best practices—keeping you ahead without constant manual overhauls.
-- Scalable & Flexible:  
-  The pipeline easily integrates new frameworks or toolchains, allowing you to add or remove backend/frontend options while always incorporating the best solution.
+- Speed and Simplicity  
+  Non-technical users can create high-performance websites with a single prompt  
+  Technical users can customize through an integrated IDE
 
----
+- End-to-End Testing  
+  Persona-based simulation replaces manual QA with automated interaction testing
+
+- Cost and Time Efficiency  
+  Reduces engineering workload and speeds up time-to-market  
+  Potential ROI of 3.5× to 8×
+
+- Continuous Evolution  
+  Keeps your site updated with best practices and user experience improvements
+
+- Scalable Architecture  
+  Modular backend and frontend design allows easy extension and integration with modern stacks
 
 ## Key Takeaways
 
-- Streamlined Lifecycle:  
-  exe.ai simplifies the entire development process—from prompt interpretation to code generation, from persona-based simulation to final deployment.
-- Automated Scoring:  
-  The system always selects the best technology stack, saving both cost and time.
-- Evolving Excellence:  
-  An iterative feedback loop keeps your website continuously optimized for top performance and user satisfaction.
+- Full lifecycle coverage: from prompt to live, optimized deployment  
+- Persona-driven evaluation and automated tech stack scoring  
+- Smart feedback loop for ongoing updates and performance boosts
+
+## Demo and Slides
+
+Paste your links below:  
+Slides Link:[slide link](https://www.canva.com/design/DAGieJ6prdo/uZ-GwO5j1S6dL4retpv33g/edit?utm_content=DAGieJ6prdo&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton)
+
+## Team
+
+- Krish Saraf  
+- Sudipta Guha  
+- Abhiraj Gupta
